@@ -24,11 +24,6 @@ def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
 
-hosts = {54: {"host": "10.154.29.54", "key_filename": ""},
-         53: {"host": "10.154.29.53", "key_filename": ""},
-         }
-
-
 @app.route("/")
 def index():
     all_project = get_project()
@@ -57,26 +52,26 @@ def build_log(timestamp=None):
     return render_template("build_log.html", logs=list_of_all_the_lines)
 
 
-@app.route('/deploy/<int:id>')
-def deploy(id):
-    if id is None:
-        return "id不能为空"
-    hostname = hosts[id]['host']
-    key_filename = hosts[id]['key_filename']
-    trans_data(hostname, key_filename, '/home/tomcat/gpc/', 'gpc/target/')
-    return "发布成功"
+@app.route('/deploy')
+def deploy():
+    package_name = 'gpc-0.0.1-SNAPSHOT.jar'
+    ssh_key = '/home/tomcat/.ssh/id_rsa'
+    result = ""
+    if trans_data('10.154.29.54', ssh_key, '/home/tomcat/gpc/%s' % package_name, 'gpc/target/%s' % package_name):
+        result = "54发布成功"
+    if trans_data('10.154.29.53', ssh_key, '/home/tomcat/gpc/%s' % package_name, 'gpc/target/%s' % package_name):
+        result += "\r53发布成功"
+    return result
 
 
-@app.route('/restart/<int:id>')
-def restart(id):
-    if id is None:
-        return "id不能为空"
-    hostname = hosts[id]['host']
-    key_filename = hosts[id]['key_filename']
-    if command(hostname, key_filename, 'cd /home/tomcat/gpc && ./start_for_summer.sh'):
-        return "重启成功"
-    else:
-        return "重启失败"
+@app.route('/restart')
+def restart():
+    result = ""
+    if command('10.154.29.54', '/home/tomcat/.ssh/id_rsa', 'cd /home/tomcat/gpc && ./start_for_summer.sh'):
+        result = "54发布成功"
+    if command('10.154.29.53', '/home/tomcat/.ssh/id_rsa', 'cd /home/tomcat/gpc && ./start_for_summer.sh'):
+        result += "53发布成功"
+    return result
 
 
 @app.before_request
