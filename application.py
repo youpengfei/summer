@@ -1,4 +1,6 @@
 # coding=utf-8
+from db_help import save
+
 __author__ = 'youpengfei'
 
 import os
@@ -72,6 +74,21 @@ def restart():
     if command('10.154.29.53', '/home/tomcat/.ssh/id_rsa', 'cd /home/tomcat/gpc && ./start_for_summer.sh'):
         result += "53发布成功"
     return result
+
+
+@app.route("/add_server", methods=['POST', 'GET'])
+def add_server():
+    if request.method == 'GET':
+        return render_template("add_server.html")
+    elif request.method == 'POST':
+        ip = request.form['ip']
+        port = request.form['port']
+        passwd = request.form['passwd']
+        key_file = request.form['key_file']
+        deploy_dir = request.form['deploy_dir']
+        sql = '''insert into server(ip,port,passwd,key_file,deploy_dir) values(%s,%s,%s,%s,%s)'''
+        save(g.db, sql, (ip, port, passwd, key_file, deploy_dir))
+        return '成功'
 
 
 @app.before_request
