@@ -18,10 +18,14 @@ def command(hostname, key_file, command):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname, 22, DEFAULT_USERNAME, key_filename=key_file)
-    stdin, stdout, stderr = ssh.exec_command(command)
-    if not stderr.readlines():
-        print stdout.readlines()
-    ssh.close()
+    try:
+        stdin, stdout, stderr = ssh.exec_command(command)
+        if stderr.readlines():
+            return False
+        else:
+            return True
+    finally:
+        ssh.close()
 
 
 if __name__ == '__main__':
