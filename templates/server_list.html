@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}
+酷夏打包系统>> 服务器配置
+{% endblock %}
+{% block body %}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>服务器地址</th>
+        <th>ssh登录端口</th>
+        <th>密码保存路径</th>
+        <th>发布目录</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for server in server_list %}
+    <tr>
+        <td>{{server.ip}}</td>
+        <td>{{server.port}}</td>
+        <td>{{server.key_file}}</td>
+        <td>{{server.deploy_dir}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
