@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+酷夏打包系统>>  项目列表
+{% endblock %}
+{% block body %}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>项目名称</th>
+        <th>项目地址</th>
+        <th>项目发布路径</th>
+        <th>项目发布名称</th>
+        <th>项目描述</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for project in project_list %}
+    <tr>
+        <td>{{project.name}}</td>
+        <td>{{project.repo}}</td>
+        <td>{{project.project_dir}}</td>
+        <td>{{project.deploy_name}}</td>
+        <td>{{project.description}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

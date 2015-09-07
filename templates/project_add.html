@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}
+酷夏打包系统>>新增项目
+{% endblock %}
+{% block body %}
+
+<form action="/project/add" method="post">
+    <div class="form-group">
+        <label for="name">项目名称</label>
+        <input id="name" name="name" type="text" class="form-control" placeholder=""/>
+    </div>
+    <div class="form-group">
+        <label for="repo">项目代码地址</label>
+        <input name="repo" type="text" class="form-control" id="repo"/>
+    </div>
+    <div class="form-group">
+        <label for="project_dir">项目迁出位置</label>
+        <input name="project_dir" type="text" id="project_dir" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label for="deploy_name">发布名称</label>
+        <input name="deploy_name" type="text" id="deploy_name" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label for="description">项目描述</label>
+        <input name="description" type="text" id="description" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-default">提交</button>
+</form>
+
+{% endblock %}

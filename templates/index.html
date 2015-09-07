@@ -1,27 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>酷夏打包系统</title>
-    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript">
+{% extends "layout.html" %}
+
+{% block body %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>项目名称</th>
+        <th>服务器地址</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for requirement in all_requirement %}
+    <tr>
+        <td>{{requirement.project_id}}</td>
+        <td>{{requirement.server_list}}</td>
+        <td>
+            <button class="package_btn">打包</button>
+            <button class="deploy_btn">发布</button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript">
        $(function(){
-        $("#package_btn").click(function(){
+        $(".package_btn").click(function(){
            $.get('/build', function(data) {
                 alert('打包成功');
                 window.open("build/log/"+data,true);
         });
        });
        });
-    </script>
-</head>
-<body>
-<ul>
-    <li>gpc项目上线
-        <button id="package_btn">打包</button>
-        <button id="deploy_btn">发布</button>
-    </li>
-</ul>
+</script>
 
-</body>
-</html>
+{% endblock %}
