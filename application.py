@@ -67,8 +67,8 @@ def deploy(id):
     for server_id in server_ids:
         server = db_session.query(Server).filter_by(id=server_id).one()
         ssh_key = server.key_file
-        result += trans_data(server.ip, ssh_key, server.deploy_dir + "/" + package_name,
-                             project.project_dir + '/target/'+package_name)
+        trans_data(server.ip, ssh_key, "%s/%s" % server.deploy_dir % package_name,
+                   '%s/target/%s' % project.project_dir % package_name)
 
     return result
 
@@ -81,7 +81,7 @@ def restart(id):
     for server_id in server_ids:
         server = db_session.query(Server).filter_by(id=server_id).one()
         ssh_key = server.key_file
-        command(server.ip, ssh_key, 'cd /home/tomcat/gpc && ./start_for_summer.sh')
+        command(server.ip, ssh_key, 'cd %s && ./start_for_summer.sh' % server.deploy_dir)
     return result
 
 
