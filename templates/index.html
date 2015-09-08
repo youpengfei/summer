@@ -17,6 +17,7 @@
         <td>
             <button class="package_btn" tag="{{requirement.id}}">打包</button>
             <button class="deploy_btn" tag="{{requirement.id}}">发布</button>
+            <button class="restart_btn" tag="{{requirement.id}}">发布</button>
         </td>
     </tr>
     {% endfor %}
@@ -24,14 +25,27 @@
 </table>
 
 <script type="text/javascript">
-       $(function(){
-        $(".package_btn").click(function(){
-           $.get('/build/'+$(this).attr("tag"), function(data) {
+    $(function () {
+        $(".package_btn").click(function () {
+            $.get('/build/' + $(this).attr("tag"), function (data) {
                 alert('打包成功');
-                window.open("build/log/"+data,true);
+            });
         });
-       });
-       });
+
+        $(".deploy_btn").click(function () {
+            $.get('/deploy/' + $(this).attr("tag"), function (data) {
+                alert('发布成功');
+            });
+        });
+
+        $(".restart_btn").click(function () {
+            $.get('/restart/' + $(this).attr("tag"), function (data) {
+                alert('发布成功');
+            });
+        });
+
+
+    });
 </script>
 
 {% endblock %}

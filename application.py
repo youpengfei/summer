@@ -73,13 +73,15 @@ def deploy(id):
     return result
 
 
-@app.route('/restart')
-def restart():
+@app.route('/restart/<int:id>')
+def restart(id):
+    requirement = db_session.query(Requirement).filter_by(id=id).one()
+    server_ids = requirement.server_list.split(',')
     result = ""
-    if command('10.154.29.54', '/home/tomcat/.ssh/id_rsa', 'cd /home/tomcat/gpc && ./start_for_summer.sh'):
-        result = "54发布成功"
-    if command('10.154.29.53', '/home/tomcat/.ssh/id_rsa', 'cd /home/tomcat/gpc && ./start_for_summer.sh'):
-        result += "53发布成功"
+    for server_id in server_ids:
+        server = db_session.query(Server).filter_by(id=server_id)
+        ssh_key = server.key_file
+        command(server.ip, ssh_key, 'cd /home/tomcat/gpc && ./start_for_summer.sh')
     return result
 
 
