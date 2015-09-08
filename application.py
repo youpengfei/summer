@@ -68,7 +68,7 @@ def deploy(id):
         server = db_session.query(Server).filter_by(id=server_id).one()
         ssh_key = server.key_file
         result += trans_data(server.ip, ssh_key, server.deploy_dir + "/" + package_name,
-                             project.project_dir + '/target/%s' % package_name)
+                             project.project_dir + '/target/'+package_name)
 
     return result
 
