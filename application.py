@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 app.config.from_object(__name__)
 
-MAVEN_BIN = '/usr/local/bin/mvn'
+MAVEN_BIN = 'mvn'
 
 
 def connect_db():
@@ -65,7 +65,7 @@ def deploy(id):
     package_name = project.deploy_name
     result = ""
     for server_id in server_ids:
-        server = db_session.query(Server).filter_by(id=server_id)
+        server = db_session.query(Server).filter_by(id=server_id).one()
         ssh_key = server.key_file
         result += trans_data(server.ip, ssh_key, server.deploy_dir + "/" + package_name,
                              project.project_dir + '/target/%s' % package_name)
@@ -79,7 +79,7 @@ def restart(id):
     server_ids = requirement.server_list.split(',')
     result = ""
     for server_id in server_ids:
-        server = db_session.query(Server).filter_by(id=server_id)
+        server = db_session.query(Server).filter_by(id=server_id).one()
         ssh_key = server.key_file
         command(server.ip, ssh_key, 'cd /home/tomcat/gpc && ./start_for_summer.sh')
     return result

@@ -17,7 +17,7 @@
         <td>
             <button class="package_btn" tag="{{requirement.id}}">打包</button>
             <button class="deploy_btn" tag="{{requirement.id}}">发布</button>
-            <button class="restart_btn" tag="{{requirement.id}}">发布</button>
+            <button class="restart_btn" tag="{{requirement.id}}">重启</button>
         </td>
     </tr>
     {% endfor %}
@@ -40,7 +40,7 @@
 
         $(".restart_btn").click(function () {
             $.get('/restart/' + $(this).attr("tag"), function (data) {
-                alert('发布成功');
+                alert('重启成功');
             });
         });
 
