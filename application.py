@@ -34,8 +34,7 @@ def build_project(id):
     requirement = db_session.query(Requirement).filter_by(id=id).one()
     project = db_session.query(Project).filter_by(id=requirement.project_id).one()
     call(["rm", "-rf", project.project_dir])
-    call(['git', 'clone', project.repo])
-    call(['git', '-C', project.project_dir, 'checkout', requirement.branch_name])
+    call(['git', 'clone', '-b', requirement.branch_name, project.repo])
     maven_result = Popen(
         [MAVEN_BIN, '-U', 'clean', 'package', '-Dmaven.test.skip=true', '-s', '%s/settings.xml' % project.project_dir,
          '-f', project.project_dir], stdout=subprocess.PIPE)
