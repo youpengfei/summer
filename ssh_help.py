@@ -35,7 +35,7 @@ def command_with_result(hostname, key_file, command):
     try:
         stdin, stdout, stderr = ssh.exec_command(command)
         if stderr.readlines():
-            return False
+            return stderr.readlines()
         else:
             return stdout.readlines()
     finally:
