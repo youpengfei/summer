@@ -147,9 +147,9 @@ def requirement_add():
         return '成功'
 
 
-@app.route("/project/logs/<int:serverId>")
-def logs(serverId):
-    server = db_session.query(Server).filter_by(id=serverId).one()
+@app.route("/server/log/<int:id>")
+def logs(id):
+    server = db_session.query(Server).filter_by(id=id).one()
     result = command_with_result(server.ip, server.key_file, 'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
     print result
     return render_template('project_log.html', result=result)
