@@ -34,10 +34,7 @@ def command_with_result(hostname, key_file, command):
     ssh.connect(hostname, 22, DEFAULT_USERNAME, key_filename=key_file)
     try:
         stdin, stdout, stderr = ssh.exec_command(command)
-        if stderr.readlines():
-            return stderr.readlines()
-        else:
-            return stdout.readlines()
+        return stdout.readlines()
     finally:
         ssh.close()
 
