@@ -28,5 +28,19 @@ def command(hostname, key_file, command):
         ssh.close()
 
 
+def command_with_result(hostname, key_file, command):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname, 22, DEFAULT_USERNAME, key_filename=key_file)
+    try:
+        stdin, stdout, stderr = ssh.exec_command(command)
+        if stderr.readlines():
+            return False
+        else:
+            return stdout.readlines()
+    finally:
+        ssh.close()
+
+
 if __name__ == '__main__':
     trans_data()

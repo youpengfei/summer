@@ -7,7 +7,7 @@ import os
 from subprocess import call, Popen
 from modules import Base, engine, db_session, Project, Server, Requirement
 import time
-from ssh_help import trans_data, command
+from ssh_help import trans_data, command, command_with_result
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
@@ -145,6 +145,12 @@ def requirement_add():
         db_session.add(requirement)
         db_session.commit()
         return '成功'
+
+
+@app.route("/project/logs/<int:serverId>")
+def logs(serverId):
+    server = db_session.query(Server).filter_by(id=serverId).one()
+    command_with_result(server.ip, server.key_file, 'tail -n200 %s/%s ' % (server.deploy_dir, 'gpc-j.log'))
 
 
 if __name__ == '__main__':
