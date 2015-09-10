@@ -163,6 +163,11 @@ def logs(id):
     return render_template('project_log.html', result=result)
 
 
+@app.teardown_request
+def shutdown_session(exception=None):
+    db_session.remove()
+
+
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
     app.run(host='0.0.0.0', debug=True)

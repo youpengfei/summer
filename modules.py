@@ -1,14 +1,16 @@
-from sqlalchemy.orm import sessionmaker
-
 __author__ = 'youpengfei'
-
-from sqlalchemy import create_engine, Integer, Column, String, Sequence
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import create_engine, Integer, Column, String
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite:///summer.db', echo=True)
+engine = create_engine('sqlite:///summer.db', echo=True, convert_unicode=True)
+
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
-db_session = Session()
+Base.query = db_session.query_property()
 
 
 class Project(Base):
@@ -45,7 +47,7 @@ class Requirement(Base):
     project_id = Column(Integer)
     server_list = Column(String)
     branch_name = Column(String)
-    server_ip_list =[]
+    server_ip_list = []
     project_name = ''
 
     def __repr__(self):
