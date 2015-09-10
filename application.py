@@ -150,7 +150,8 @@ def requirement_add():
 @app.route("/project/logs/<int:serverId>")
 def logs(serverId):
     server = db_session.query(Server).filter_by(id=serverId).one()
-    command_with_result(server.ip, server.key_file, 'tail -n200 %s/%s ' % (server.deploy_dir, 'gpc-j.log'))
+    result = command_with_result(server.ip, server.key_file, 'tail -n200 %s/%s ' % (server.deploy_dir, 'gpc-j.log'))
+    return render_template('project_log.html', result=result)
 
 
 if __name__ == '__main__':
