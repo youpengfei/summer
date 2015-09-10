@@ -25,6 +25,13 @@ def connect_db():
 @app.route("/")
 def index():
     all_requirement = db_session.query(Requirement).all()
+    for requirement in all_requirement:
+        servers = db_session.query(Server).filter(
+            Server.id.in_(requirement.server_list.split(","))).all()
+        project = db_session.query(Project).filter_by(id=requirement.project_id).one()
+        requirement.server_ip_list = ",".join([x.ip for x in servers])
+        requirement.project_name = project.name
+
     return render_template('index.html', all_requirement=all_requirement)
 
 
@@ -150,7 +157,8 @@ def requirement_add():
 @app.route("/server/log/<int:id>")
 def logs(id):
     server = db_session.query(Server).filter_by(id=id).one()
-    result = command_with_result(server.ip, server.key_file, 'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
+    result = command_with_result(server.ip, server.key_file,
+                                 'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
     print result
     return render_template('project_log.html', result=result)
 
