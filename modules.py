@@ -45,7 +45,7 @@ class Requirement(Base):
     project_id = Column(Integer)
     server_list = Column(String)
     branch_name = Column(String)
-    server_ip_list = ''
+    server_ip_list =[]
     project_name = ''
 
     def __repr__(self):

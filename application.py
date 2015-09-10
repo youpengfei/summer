@@ -29,7 +29,7 @@ def index():
         servers = db_session.query(Server).filter(
             Server.id.in_(requirement.server_list.split(","))).all()
         project = db_session.query(Project).filter_by(id=requirement.project_id).one()
-        requirement.server_ip_list = ",".join([x.ip for x in servers])
+        requirement.server_ip_list = [x.ip for x in servers]
         requirement.project_name = project.name
 
     return render_template('index.html', all_requirement=all_requirement)
