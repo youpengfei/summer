@@ -11,6 +11,7 @@
         <th>ssh登录端口</th>
         <th>密码保存路径</th>
         <th>发布目录</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
         <td>{{server.port}}</td>
         <td>{{server.key_file}}</td>
         <td>{{server.deploy_dir}}</td>
+        <td><a href="/server/log/{{ server.id }}"> 查看日志</a></td>
     </tr>
     {% endfor %}
     </tbody>
