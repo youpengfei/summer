@@ -155,7 +155,7 @@ def start_config():
         for server_id in servers:
             server = Server.query.filter_by(id=server_id).one()
             ssh_key = server.key_file
-            trans_data(server.ip, ssh_key, "%s/%s" % (server.deploy_dir), 'start_for_summer.sh')
+            trans_data(server.ip, ssh_key, "%s/" % (server.deploy_dir), 'start_for_summer.sh')
         return "成功"
 
 
