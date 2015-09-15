@@ -142,6 +142,23 @@ def requirement_add():
         return '成功'
 
 
+@app.route("/config/start", methods=['POST', 'GET'])
+def start_config():
+    if request.method == 'GET':
+        servers = Server.query.all()
+        return render_template('config.html', servers=servers)
+    elif request.method == 'POST':
+        file = open('start_for_summer.sh', 'w')
+        file.write(request.form['sh'])
+        file.close()
+        servers = request.form.getlist('servers')
+        for server_id in servers:
+            server = Server.query.filter_by(id=server_id).one()
+            ssh_key = server.key_file
+            trans_data(server.ip, ssh_key, "%s/%s" % (server.deploy_dir), 'start_for_summer.sh')
+        return "成功"
+
+
 @app.route("/server/log/<int:id>")
 def logs(id):
     server = Server.query.filter_by(id=id).one()
