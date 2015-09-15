@@ -2,4 +2,4 @@ Flask==0.10.1
 paramiko==1.15.2
 SQLAlchemy==1.0.8
 Flask-SQLAlchemy==2.0
-MySQL-Python=1.2.5
+MySQL-Python==1.2.5
