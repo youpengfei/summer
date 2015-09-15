@@ -4,6 +4,7 @@
 {% endblock %}
 {% block body %}
 
+
 <form action="/requirement/add" method="post">
     <div class="form-group">
         <label for="project">关联项目</label>
@@ -17,7 +18,7 @@
     <div class="form-group">
         <label for="servers">关联服务器</label>
         {% for server in servers %}
-        {{server.ip}} <input type="checkbox" name="servers" id="servers" value="{{server.id}}"/>
+        <input type="checkbox" name="servers" id="servers" value="{{server.id}}"/> {{server.ip}} <br>
         {% endfor %}
     </div>
     <div class="form-group">

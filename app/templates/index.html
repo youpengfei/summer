@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
+
+<a href="/requirement/add">新增需求</a>
+
 <table class="table table-striped">
     <thead>
     <tr>
@@ -18,7 +21,7 @@
             {% for server_ip in requirement.server_ip_list%}
             <span class="label label-info">{{server_ip}}</span>
             {% endfor%}
-             </td>
+        </td>
         <td>
             <button class="package_btn" tag="{{requirement.id}}">打包</button>
             <button class="deploy_btn" tag="{{requirement.id}}">发布</button>
