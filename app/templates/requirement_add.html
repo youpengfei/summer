@@ -7,6 +7,10 @@
 
 <form action="/requirement/add" method="post">
     <div class="form-group">
+        <label for="name">项目名称</label>
+        <input name="name" type="text" id="name" class="form-control"/>
+    </div>
+    <div class="form-group">
         <label for="project">关联项目</label>
         <select id="project" name="project_id" class="form-control">
             {% for project in projects %}

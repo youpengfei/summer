@@ -2,15 +2,24 @@
 {% block title %}
 酷夏打包系统>> 服务器配置
 {% endblock %}
+
+{%block nav%}
+<ul class="nav nav-sidebar">
+    <li id="require_li"><a href="/">需求</a></li>
+    <li id="server_li" class="active"><a href="/server/list">服务器配置</a></li>
+    <li id="project_li"><a href="/project/list">项目信息</a></li>
+</ul>
+{% endblock %}
+
 {% block body %}
+<a href="/server/add">新增服务器</a>
 
 <table class="table table-striped">
     <thead>
     <tr>
         <th>服务器地址</th>
         <th>ssh登录端口</th>
-        <th>密码保存路径</th>
-        <th>发布目录</th>
+        <th>ssh_key路径</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -20,7 +29,6 @@
         <td>{{server.ip}}</td>
         <td>{{server.port}}</td>
         <td>{{server.key_file}}</td>
-        <td>{{server.deploy_dir}}</td>
         <td><a href="/server/log/{{ server.id }}"> 查看日志</a></td>
     </tr>
     {% endfor %}

@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 
+{%block nav%}
+<ul class="nav nav-sidebar">
+    <li id="require_li" class="active"><a href="/">需求</a></li>
+    <li id="server_li"><a href="/server/list">服务器配置</a></li>
+    <li id="project_li"><a href="/project/list">项目信息</a></li>
+</ul>
+{% endblock %}
+
 {% block body %}
 
 <a href="/requirement/add">新增需求</a>
@@ -7,6 +15,7 @@
 <table class="table table-striped">
     <thead>
     <tr>
+        <th>需求名称</th>
         <th>项目名称</th>
         <th>服务器地址</th>
         <th>操作</th>
@@ -15,6 +24,7 @@
     <tbody>
     {% for requirement in all_requirement %}
     <tr>
+        <td>{{requirement.name }}</td>
         <td>{{requirement.project_name}}</td>
 
         <td>

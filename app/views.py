@@ -6,7 +6,8 @@ from subprocess import call, Popen
 from app import db, app
 from app.models import Project, Server, Requirement
 from ssh_help import trans_data, command, command_with_result
-from flask import request, render_template
+from flask import request, render_template, url_for
+from werkzeug.utils import redirect
 
 MAVEN_BIN = 'mvn'
 
@@ -20,7 +21,7 @@ def index():
         requirement.server_ip_list = [x.ip for x in servers]
         requirement.project_name = project.name
 
-    return render_template('index.html', all_requirement=all_requirement)
+    return render_template('index.html', all_requirement=all_requirement, active="requirement")
 
 
 @app.route('/build/<int:id>')
@@ -83,46 +84,52 @@ def restart(id):
 @app.route("/server/add", methods=['POST', 'GET'])
 def server_add():
     if request.method == 'GET':
-        return render_template("server_add.html")
+        return render_template("server_add.html", active="server")
     elif request.method == 'POST':
         ip = request.form['ip']
         port = request.form['port']
         passwd = request.form['passwd']
         key_file = request.form['key_file']
-        deploy_dir = request.form['deploy_dir']
-        server = Server(ip=ip, port=port, passwd=passwd, key_file=key_file, deploy_dir=deploy_dir)
+        server = Server(ip=ip, port=port, passwd=passwd, key_file=key_file)
         db.session.add(server)
         db.session.commit()
-        return '成功'
+        return redirect('/server/list')
 
 
 @app.route("/server/list", methods=['POST', 'GET'])
 def server_list():
     servers = Server.query.all()
-    return render_template('server_list.html', server_list=servers)
+    return render_template('server_list.html', server_list=servers, active="server")
 
 
 @app.route("/project/add", methods=['POST', 'GET'])
 def project_add():
     if request.method == 'GET':
-        return render_template("project_add.html")
+        return render_template("project_add.html", active="project")
     elif request.method == 'POST':
         name = request.form['name']
         repo = request.form['repo']
         project_dir = request.form['project_dir']
         deploy_name = request.form['deploy_name']
         description = request.form['description']
-        project = Project(name=name, repo=repo, project_dir=project_dir, deploy_name=deploy_name,
+        deploy_dir = request.form['deploy_dir']
+        package_type = request.form['package_type']
+        project = Project(name=name,
+                          repo=repo,
+                          project_dir=project_dir,
+                          deploy_name=deploy_name,
+                          deploy_dir=deploy_dir,
+                          package_type=package_type,
                           description=description)
         db.session.add(project)
         db.session.commit()
-        return '成功'
+        return redirect('/project/list')
 
 
 @app.route("/project/list", methods=['GET'])
 def project_list():
     projects = Project.query.all()
-    return render_template('project_list.html', project_list=projects)
+    return render_template('project_list.html', project_list=projects, active="project")
 
 
 @app.route("/requirement/add", methods=['POST', 'GET'])
@@ -134,12 +141,13 @@ def requirement_add():
     elif request.method == 'POST':
         branch_name = request.form['branch_name']
         servers = request.form.getlist('servers')
+        name = request.form['name']
         server_list = ",".join(servers)
         project_id = request.form['project_id']
-        requirement = Requirement(branch_name=branch_name, server_list=server_list, project_id=project_id)
+        requirement = Requirement(branch_name=branch_name, server_list=server_list, project_id=project_id, name=name)
         db.session.add(requirement)
         db.session.commit()
-        return '成功'
+        return redirect('/')
 
 
 @app.route("/config/start", methods=['POST', 'GET'])
@@ -166,3 +174,8 @@ def logs(id):
                                  'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
     print result
     return render_template('project_log.html', result=result)
+
+
+@app.route("/login")
+def login():
+    return render_template("login.html")

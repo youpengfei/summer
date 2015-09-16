@@ -6,37 +6,39 @@ __author__ = 'youpengfei'
 class Project(db.Model):
     __tablename__ = 'project'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    repo = db.Column(db.String)
-    project_dir = db.Column(db.String)
-    deploy_name = db.Column(db.String)
-    description = db.Column(db.String)
+    name = db.Column(db.String(50))
+    repo = db.Column(db.String(50))
+    project_dir = db.Column(db.String(50))
+    deploy_name = db.Column(db.String(50))
+    description = db.Column(db.String(50))
+    deploy_dir = db.Column(db.String(50))
+    package_type = db.Column(db.String(50))  # mvn  gradle
 
     def __repr__(self):
-        return "<Project(name='%s', repo='%s', project_dir='%s',deploy_name='%s', description='%s' )>" % (
-            self.name, self.repo, self.project_dir, self.deploy_name, self.description)
+        return "<Project(name='%s', repo='%s', project_dir='%s',deploy_name='%s', description='%s',deploy_dir='%s' )>" % (
+            self.name, self.repo, self.project_dir, self.deploy_name, self.description, self.deploy_dir)
 
 
 class Server(db.Model):
     __tablename__ = 'server'
     id = db.Column(db.Integer, primary_key=True)
-    ip = db.Column(db.String)
+    ip = db.Column(db.String(50))
     port = db.Column(db.Integer)
-    passwd = db.Column(db.String)
-    key_file = db.Column(db.String)
-    deploy_dir = db.Column(db.String)
+    passwd = db.Column(db.String(50))
+    key_file = db.Column(db.String(50))
 
     def __repr__(self):
-        return "<Server(ip='%s', port='%d', passwd='%s',key_file='%s', deploy_dir='%s' )>" % (
-            self.ip, self.port, self.passwd, self.key_file, self.deploy_dir)
+        return "<Server(ip='%s', port='%d', passwd='%s',key_file='%s')>" % (
+            self.ip, self.port, self.passwd, self.key_file)
 
 
 class Requirement(db.Model):
     __tablename__ = 'requirement'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
     project_id = db.Column(db.Integer)
-    server_list = db.Column(db.String)
-    branch_name = db.Column(db.String)
+    server_list = db.Column(db.String(50))
+    branch_name = db.Column(db.String(50))
     server_ip_list = []
     project_name = ''
 
@@ -45,5 +47,13 @@ class Requirement(db.Model):
             self.project_id, self.server_list, self.branch_name)
 
 
-if __name__ == '__main__':
-    db.create_all()
+class User(db.Model):
+    __tablename__ = 'user'
+    User = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    email = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+
+    def __repr__(self):
+        return "<User(User='%s', name='%d', email='%s',password='%s' )>" % (
+            self.id, self.name, self.email, self.password)
