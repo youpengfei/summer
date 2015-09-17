@@ -73,11 +73,12 @@ def deploy(id):
 def restart(id):
     requirement = Requirement.query.filter_by(id=id).one()
     server_ids = requirement.server_list.split(',')
+    project = Project.query.filter_by(id=requirement.project_id).one()
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
         ssh_key = server.key_file
-        command(server.ip, ssh_key, 'cd %s && ./start_for_summer.sh' % server.deploy_dir)
+        command(server.ip, ssh_key, 'cd %s && ./start_for_summer.sh' % project.deploy_dir)
     return result
 
 
