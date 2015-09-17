@@ -17,8 +17,9 @@ class Project(db.Model):
     stop_sh = db.Column(db.Text)
 
     def __repr__(self):
-        return "<Project(name='%s', repo='%s', project_dir='%s',deploy_name='%s', description='%s',deploy_dir='%s' )>" % (
-            self.name, self.repo, self.project_dir, self.deploy_name, self.description, self.deploy_dir)
+        return "<Project(name='%s', repo='%s', project_dir='%s',deploy_name='%s', description='%s',deploy_dir='%s' , start_sh='%s',stop_sh='%s')>" \
+               % (self.name, self.repo, self.project_dir, self.deploy_name, self.description, self.deploy_dir,
+                  self.start_sh, self.stop_sh)
 
 
 class Server(db.Model):
