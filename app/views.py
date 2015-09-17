@@ -11,7 +11,6 @@ from werkzeug.utils import redirect
 
 MAVEN_BIN = 'mvn'
 
-
 @app.route("/")
 def index():
     all_requirement = Requirement.query.all()
