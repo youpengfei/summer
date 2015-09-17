@@ -21,7 +21,7 @@ def index():
         requirement.server_ip_list = [x.ip for x in servers]
         requirement.project_name = project.name
 
-    return render_template('index.html', all_requirement=all_requirement, active="requirement")
+    return render_template('index.html', all_requirement=all_requirement)
 
 
 @app.route('/build/<int:id>')
@@ -63,7 +63,7 @@ def deploy(id):
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
         ssh_key = server.key_file
-        trans_data(server.ip, ssh_key, "%s/%s" % (server.deploy_dir, package_name),
+        trans_data(server.ip, ssh_key, "%s/%s" % (project.deploy_dir, package_name),
                    '%s/target/%s' % (project.project_dir, package_name))
 
     return result
@@ -174,6 +174,15 @@ def logs(id):
                                  'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
     print result
     return render_template('project_log.html', result=result)
+
+
+@app.route('/project/delete/<int:id>')
+def project_delete(id):
+    project = Project.query.filter_by(id=id).one()
+    if project:
+        db.session.delete(project)
+        db.session.commit()
+    return redirect('/project/list')
 
 
 @app.route("/login")

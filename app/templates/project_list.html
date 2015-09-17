@@ -21,6 +21,7 @@
         <th>项目发布路径</th>
         <th>项目发布名称</th>
         <th>项目描述</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -33,6 +34,7 @@
         <td>{{project.deploy_dir}}</td>
         <td>{{project.deploy_name}}</td>
         <td>{{project.description}}</td>
+        <td><a href="/project/delete/{{project.id}}">删除</a></td>
 
     </tr>
     {% endfor %}
