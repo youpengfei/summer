@@ -84,11 +84,11 @@ def init_project(id):
         command(server.ip, ssh_key, 'mkdir -p %s' % project.deploy_dir)
 
         command(server.ip, ssh_key, 'touch   %s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
-        command(server.ip, ssh_key, 'echo  "%s" > %s/%s' % (project.start_sh, project.deploy_dir, 'start_for_summer.sh'))
+        command(server.ip, ssh_key, 'echo  "`%s`" > %s/%s' % (project.start_sh, project.deploy_dir, 'start_for_summer.sh'))
         command(server.ip, ssh_key, 'chmod u+x   %s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
 
         command(server.ip, ssh_key, 'touch   %s/%s' % (project.deploy_dir, 'stop.sh'))
-        command(server.ip, ssh_key, 'echo  "%s" >%s/%s' % (project.stop_sh, project.deploy_dir, 'stop.sh'))
+        command(server.ip, ssh_key, 'echo  "`%s`" >%s/%s' % (project.stop_sh, project.deploy_dir, 'stop.sh'))
         command(server.ip, ssh_key, 'chmod u+x   %s/%s' % (project.deploy_dir, 'stop.sh'))
 
     return result
