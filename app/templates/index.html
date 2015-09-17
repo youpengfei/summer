@@ -33,6 +33,7 @@
             {% endfor%}
         </td>
         <td>
+            <button class="init_btn" tag="{{requirement.id}}">初始化项目</button>
             <button class="package_btn" tag="{{requirement.id}}">打包</button>
             <button class="deploy_btn" tag="{{requirement.id}}">发布</button>
             <button class="restart_btn" tag="{{requirement.id}}">重启</button>
@@ -62,8 +63,15 @@
             });
         });
 
+        $(".restart_btn").click(function () {
+            $.get('/init/' + $(this).attr("tag"), function (data) {
+                alert('初始化成功');
+            });
+        });
 
     });
+
+
 </script>
 
 {% endblock %}

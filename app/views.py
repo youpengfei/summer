@@ -6,7 +6,7 @@ from subprocess import call, Popen
 from app import db, app
 from app.models import Project, Server, Requirement
 from ssh_help import trans_data, command, command_with_result
-from flask import request, render_template, url_for
+from flask import request, render_template
 from werkzeug.utils import redirect
 
 MAVEN_BIN = 'mvn'
@@ -65,6 +65,28 @@ def deploy(id):
         ssh_key = server.key_file
         trans_data(server.ip, ssh_key, "%s/%s" % (project.deploy_dir, package_name),
                    '%s/target/%s' % (project.project_dir, package_name))
+
+    return result
+
+
+@app.route('/init/<int:id>')
+def init_project(id):
+    requirement = Requirement.query.filter_by(id=id).one()
+    project = Project.query.filter_by(id=requirement.project_id).one()
+    server_ids = requirement.server_list.split(',')
+    result = ""
+    for server_id in server_ids:
+        server = Server.query.filter_by(id=server_id).one()
+        ssh_key = server.key_file
+        command(server.ip, ssh_key, 'mkdir -p %s' % project.deploy_dir)
+
+        command(server.ip, ssh_key, 'touch   %s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
+        command(server.ip, ssh_key, 'echo  %s >>%s/%s' % (project.start_sh, project.deploy_dir, 'start_for_summer.sh'))
+        command(server.ip, ssh_key, 'chmod u+x   %s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
+
+        command(server.ip, ssh_key, 'touch   %s/%s' % (project.deploy_dir, 'stop.sh'))
+        command(server.ip, ssh_key, 'echo  %s >>%s/%s' % (project.start_sh, project.deploy_dir, 'stop.sh'))
+        command(server.ip, ssh_key, 'chmod u+x   %s/%s' % (project.deploy_dir, 'stop.sh'))
 
     return result
 

@@ -13,6 +13,8 @@ class Project(db.Model):
     description = db.Column(db.String(50))
     deploy_dir = db.Column(db.String(50))
     package_type = db.Column(db.String(50))  # mvn  gradle
+    start_sh = db.Column(db.Text)
+    stop_sh = db.Column(db.Text)
 
     def __repr__(self):
         return "<Project(name='%s', repo='%s', project_dir='%s',deploy_name='%s', description='%s',deploy_dir='%s' )>" % (
