@@ -74,7 +74,6 @@ def init_project(id):
     project = Project.query.filter_by(id=requirement.project_id).one()
     server_ids = requirement.server_list.split(',')
     result = ""
-    print project
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
         ssh_key = server.key_file
