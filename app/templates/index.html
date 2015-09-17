@@ -63,7 +63,7 @@
             });
         });
 
-        $(".restart_btn").click(function () {
+        $(".init_btn").click(function () {
             $.get('/init/' + $(this).attr("tag"), function (data) {
                 alert('初始化成功');
             });
