@@ -11,6 +11,7 @@ from werkzeug.utils import redirect
 
 MAVEN_BIN = 'mvn'
 
+
 @app.route("/")
 def index():
     all_requirement = Requirement.query.all()
@@ -77,16 +78,17 @@ def init_project(id):
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
         ssh_key = server.key_file
-        command(server.ip, ssh_key, 'mkdir -p %s' % project.deploy_dir)
         print project.start_sh
         print project.stop_sh
 
+        command(server.ip, ssh_key, 'mkdir -p %s' % project.deploy_dir)
+
         command(server.ip, ssh_key, 'touch   %s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
-        command(server.ip, ssh_key, 'echo  %s >> %s/%s' % (project.start_sh, project.deploy_dir, 'start_for_summer.sh'))
+        command(server.ip, ssh_key, 'echo  "%s" >> %s/%s' % (project.start_sh, project.deploy_dir, 'start_for_summer.sh'))
         command(server.ip, ssh_key, 'chmod u+x   %s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
 
         command(server.ip, ssh_key, 'touch   %s/%s' % (project.deploy_dir, 'stop.sh'))
-        command(server.ip, ssh_key, 'echo  %s >>%s/%s' % (project.start_sh, project.deploy_dir, 'stop.sh'))
+        command(server.ip, ssh_key, 'echo  "%s" >>%s/%s' % (project.start_sh, project.deploy_dir, 'stop.sh'))
         command(server.ip, ssh_key, 'chmod u+x   %s/%s' % (project.deploy_dir, 'stop.sh'))
 
     return result
