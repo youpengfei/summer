@@ -1,13 +1,15 @@
 # -*- coding: UTF-8 -*-
+import hashlib
 import time
 import subprocess
 from subprocess import call, Popen
 
 from app import db, app, login_manager
 from app.models import Project, Server, Requirement, User
-from flask.ext.login import login_user, login_required
+from flask.ext.login import login_user, login_required, logout_user, current_user
 from ssh_help import trans_data, command, command_with_result
-from flask import request, render_template, jsonify, flash, url_for
+from flask import request, render_template, jsonify
+from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SubmitField
@@ -229,6 +231,27 @@ def login():
             return redirect('/')
 
     return render_template('login.html')
+
+
+@app.route('/password/change', methods=['GET', 'POST'])
+@login_required
+def password_change():
+    if request.method == 'GET':
+        return render_template("password_change.html")
+    elif request.method == 'POST':
+        form = LoginForm()
+        user = User.query.get(current_user.id)
+        user.password = hashlib.md5("%s-%s" % (app.config.get("PASSWORD_SALT"), form.password.data)).hexdigest()
+        db.session.add(user)
+        db.session.commit()
+        return jsonify(code=200, message="修改成功")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/login")
 
 
 @login_manager.user_loader

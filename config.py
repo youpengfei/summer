@@ -7,3 +7,4 @@ SECRET_KEY = 'you-will-never-guess'
 SQLALCHEMY_DATABASE_URI = 'mysql://root:nishishi@10.154.29.54/summer'
 SQLALCHEMY_ECHO = True
 CSRF_ENABLED = True
+PASSWORD_SALT = "you-will-never-guess"

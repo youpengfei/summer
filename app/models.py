@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
-from app import db
+import hashlib
+from app import db, app
 from flask.ext.login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 __author__ = 'youpengfei'
 
@@ -60,7 +62,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
     def verify_password(self, password):
-        return self.password == password
+        return hashlib.md5("%s-%s" % (app.config.get("PASSWORD_SALT"), password)).hexdigest() == self.password
 
     def __repr__(self):
         return "<User(User='%s', name='%d', email='%s',password='%s' )>" % (

@@ -29,8 +29,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             {% if current_user.is_authenticated %}
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Hi {{ current_user.name }}!</a></li>
+            <ul class="dropdown nav navbar-nav navbar-right">
+                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Hi {{ current_user.name }}! <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/logout">退出</a></li>
+                        <li><a href="/password/change">修改密码</a></li>
+                    </ul>
+                </li>
             </ul>
             {% endif %}
         </div>
