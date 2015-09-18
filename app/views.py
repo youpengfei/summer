@@ -3,16 +3,20 @@ import time
 import subprocess
 from subprocess import call, Popen
 
-from app import db, app
-from app.models import Project, Server, Requirement
+from app import db, app, login_manager
+from app.models import Project, Server, Requirement, User
+from flask.ext.login import login_user, login_required
 from ssh_help import trans_data, command, command_with_result
-from flask import request, render_template
+from flask import request, render_template, jsonify, flash, url_for
 from werkzeug.utils import redirect
+from flask_wtf import Form
+from wtforms import StringField, PasswordField, SubmitField
 
 MAVEN_BIN = 'mvn'
 
 
 @app.route("/")
+@login_required
 def index():
     all_requirement = Requirement.query.all()
     for requirement in all_requirement:
@@ -193,24 +197,46 @@ def start_config():
         return "成功"
 
 
-@app.route("/server/log/<int:id>")
-def logs(id):
-    server = Server.query.filter_by(id=id).one()
+@app.route("/server/log/<int:server_id>")
+def logs(server_id):
+    server = Server.query.filter_by(id=server_id).one()
     result = command_with_result(server.ip, server.key_file,
                                  'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
     print result
     return render_template('project_log.html', result=result)
 
 
-@app.route('/project/delete/<int:id>')
-def project_delete(id):
-    project = Project.query.filter_by(id=id).one()
+@app.route('/project/delete/<int:project_id>')
+def project_delete(project_id):
+    project = Project.query.filter_by(id=project_id).one()
+    requirement_count = Requirement.query.filter_by(project_id=project_id).count()
+    if requirement_count > 0:
+        return jsonify(message='存在需求关联该项目,请先删除相关联的需求', code=500)
+
     if project:
         db.session.delete(project)
         db.session.commit()
-    return redirect('/project/list')
+    return jsonify(message='删除成功', code=200)
 
 
-@app.route("/login")
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    if request.method == 'POST':
+        form = LoginForm()
+        user = User.query.filter_by(email=form.email.data).one()
+        if user is not None and user.verify_password(form.password.data):
+            login_user(user)
+            return redirect('/')
+
+    return render_template('login.html')
+
+
+@login_manager.user_loader
+def get_user(ident):
+    return User.query.get(int(ident))
+
+
+class LoginForm(Form):
+    email = StringField('email')
+    password = PasswordField('password')
+    submit = SubmitField()

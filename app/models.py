@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from app import db
+from flask.ext.login import UserMixin
 
 __author__ = 'youpengfei'
 
@@ -51,12 +52,15 @@ class Requirement(db.Model):
             self.project_id, self.server_list, self.branch_name)
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
-    User = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     email = db.Column(db.String(50))
     password = db.Column(db.String(50))
+
+    def verify_password(self, password):
+        return self.password == password
 
     def __repr__(self):
         return "<User(User='%s', name='%d', email='%s',password='%s' )>" % (

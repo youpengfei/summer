@@ -34,11 +34,23 @@
         <td>{{project.deploy_dir}}</td>
         <td>{{project.deploy_name}}</td>
         <td>{{project.description}}</td>
-        <td><a href="/project/delete/{{project.id}}">删除</a></td>
+        <td>
+            <button class="delete_btn" tag="{{project.id}}">删除</button>
+        </td>
 
     </tr>
     {% endfor %}
     </tbody>
 </table>
+<script type="text/javascript">
+    $(".delete_btn").click(function () {
+        $.get('/project/delete/' + $(this).attr("tag"), function (data) {
+            alert(data.message)
+            if (data.code === 200) {
+                window.location.href = "/project/list"
+            }
+        });
+    });
 
+</script>
 {% endblock %}
