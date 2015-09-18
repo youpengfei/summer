@@ -1,15 +1,12 @@
 # -*- coding: UTF-8 -*-
-import hashlib
 import time
-import subprocess
-from subprocess import call, Popen
+from subprocess import call
 
-from app import db, app, login_manager
-from app.models import Project, Server, Requirement, User
-from flask.ext.login import login_user, login_required, logout_user, current_user
-from ssh_help import trans_data, command, command_with_result
-from flask import request, render_template, jsonify
-from werkzeug.utils import redirect
+from app import app
+from app.models import Project, Server, Requirement
+from flask.ext.login import login_required
+from ssh_help import trans_data, command
+from flask import request, render_template
 
 MAVEN_BIN = 'mvn'
 
@@ -34,26 +31,10 @@ def build_project(id):
     project = Project.query.filter_by(id=requirement.project_id).one()
     call(["rm", "-rf", project.project_dir])
     call(['git', 'clone', '-b', requirement.branch_name, project.repo])
-    maven_result = Popen(
-        [MAVEN_BIN, '-U', 'clean', 'package', '-Dmaven.test.skip=true', '-s', '%s/settings.xml' % project.project_dir,
-         '-f', project.project_dir], stdout=subprocess.PIPE)
-    build_log = 'build.%s.log' % timestamp
-    file = open(build_log, 'w')
-    file.write(maven_result.stdout.read())
-    file.close()
+    call([MAVEN_BIN, '-U', 'clean', 'package', '-Dmaven.test.skip=true', '-s', '%s/settings.xml' % project.project_dir,
+          '-f', project.project_dir])
 
     return timestamp
-
-
-@app.route('/build/log/<timestamp>')
-def build_log(timestamp=None):
-    log_name = 'build.' + timestamp + '.log'
-    file_object = open(log_name)
-    try:
-        list_of_all_the_lines = file_object.readlines()
-    finally:
-        file_object.close()
-    return render_template("build_log.html", logs=list_of_all_the_lines)
 
 
 @app.route('/deploy/<int:id>')
@@ -110,75 +91,6 @@ def restart(id):
     return result
 
 
-@app.route("/server/add", methods=['POST', 'GET'])
-def server_add():
-    if request.method == 'GET':
-        return render_template("server_add.html", active="server")
-    elif request.method == 'POST':
-        ip = request.form['ip']
-        port = request.form['port']
-        passwd = request.form['passwd']
-        key_file = request.form['key_file']
-        server = Server(ip=ip, port=port, passwd=passwd, key_file=key_file)
-        db.session.add(server)
-        db.session.commit()
-        return redirect('/server/list')
-
-
-@app.route("/server/list", methods=['POST', 'GET'])
-def server_list():
-    servers = Server.query.all()
-    return render_template('server_list.html', server_list=servers, active="server")
-
-
-@app.route("/project/add", methods=['POST', 'GET'])
-def project_add():
-    if request.method == 'GET':
-        return render_template("project_add.html", active="project")
-    elif request.method == 'POST':
-        name = request.form['name']
-        repo = request.form['repo']
-        project_dir = request.form['project_dir']
-        deploy_name = request.form['deploy_name']
-        description = request.form['description']
-        deploy_dir = request.form['deploy_dir']
-        package_type = request.form['package_type']
-        project = Project(name=name,
-                          repo=repo,
-                          project_dir=project_dir,
-                          deploy_name=deploy_name,
-                          deploy_dir=deploy_dir,
-                          package_type=package_type,
-                          description=description)
-        db.session.add(project)
-        db.session.commit()
-        return redirect('/project/list')
-
-
-@app.route("/project/list", methods=['GET'])
-def project_list():
-    projects = Project.query.all()
-    return render_template('project_list.html', project_list=projects, active="project")
-
-
-@app.route("/requirement/add", methods=['POST', 'GET'])
-def requirement_add():
-    if request.method == 'GET':
-        projects = Project.query.all()
-        servers = Server.query.all()
-        return render_template("requirement_add.html", projects=projects, servers=servers)
-    elif request.method == 'POST':
-        branch_name = request.form['branch_name']
-        servers = request.form.getlist('servers')
-        name = request.form['name']
-        server_list = ",".join(servers)
-        project_id = request.form['project_id']
-        requirement = Requirement(branch_name=branch_name, server_list=server_list, project_id=project_id, name=name)
-        db.session.add(requirement)
-        db.session.commit()
-        return redirect('/')
-
-
 @app.route("/config/start", methods=['POST', 'GET'])
 def start_config():
     if request.method == 'GET':
@@ -194,64 +106,3 @@ def start_config():
             ssh_key = server.key_file
             trans_data(server.ip, ssh_key, "%s/" % server.deploy_dir, 'start_for_summer.sh')
         return "成功"
-
-
-@app.route("/server/log/<int:server_id>")
-def logs(server_id):
-    server = Server.query.filter_by(id=server_id).one()
-    result = command_with_result(server.ip, server.key_file,
-                                 'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
-    print result
-    return render_template('project_log.html', result=result)
-
-
-@app.route('/project/delete/<int:project_id>')
-def project_delete(project_id):
-    project = Project.query.filter_by(id=project_id).one()
-    requirement_count = Requirement.query.filter_by(project_id=project_id).count()
-    if requirement_count > 0:
-        return jsonify(message='存在需求关联该项目,请先删除相关联的需求', code=500)
-
-    if project:
-        db.session.delete(project)
-        db.session.commit()
-    return jsonify(message='删除成功', code=200)
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        user = User.query.filter_by(email=email).one()
-        if user is not None and user.verify_password(password):
-            login_user(user)
-            return redirect('/')
-
-    return render_template('login.html')
-
-
-@app.route('/password/change', methods=['GET', 'POST'])
-@login_required
-def password_change():
-    if request.method == 'GET':
-        return render_template("password_change.html")
-    elif request.method == 'POST':
-        password = request.form['password']
-        user = User.query.get(current_user.id)
-        user.password = hashlib.md5("%s-%s" % (app.config.get("PASSWORD_SALT"), password)).hexdigest()
-        db.session.add(user)
-        db.session.commit()
-        return jsonify(code=200, message="修改成功")
-
-
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect("/login")
-
-
-@login_manager.user_loader
-def get_user(ident):
-    return User.query.get(int(ident))
