@@ -2,7 +2,6 @@
 import hashlib
 from app import db, app
 from flask.ext.login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 
 __author__ = 'youpengfei'
 

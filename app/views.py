@@ -9,10 +9,7 @@ from app.models import Project, Server, Requirement, User
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from ssh_help import trans_data, command, command_with_result
 from flask import request, render_template, jsonify
-from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
-from flask_wtf import Form
-from wtforms import StringField, PasswordField, SubmitField
 
 MAVEN_BIN = 'mvn'
 
@@ -224,9 +221,10 @@ def project_delete(project_id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        form = LoginForm()
-        user = User.query.filter_by(email=form.email.data).one()
-        if user is not None and user.verify_password(form.password.data):
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).one()
+        if user is not None and user.verify_password(password):
             login_user(user)
             return redirect('/')
 
@@ -239,9 +237,9 @@ def password_change():
     if request.method == 'GET':
         return render_template("password_change.html")
     elif request.method == 'POST':
-        form = LoginForm()
+        password = request.form['password']
         user = User.query.get(current_user.id)
-        user.password = hashlib.md5("%s-%s" % (app.config.get("PASSWORD_SALT"), form.password.data)).hexdigest()
+        user.password = hashlib.md5("%s-%s" % (app.config.get("PASSWORD_SALT"), password)).hexdigest()
         db.session.add(user)
         db.session.commit()
         return jsonify(code=200, message="修改成功")
@@ -257,9 +255,3 @@ def logout():
 @login_manager.user_loader
 def get_user(ident):
     return User.query.get(int(ident))
-
-
-class LoginForm(Form):
-    email = StringField('email')
-    password = PasswordField('password')
-    submit = SubmitField()
