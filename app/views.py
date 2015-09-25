@@ -61,10 +61,12 @@ def init_project(id):
         rem.path(project.deploy_dir).mkdir()
         start_sh_path = rem.path('%s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
         start_sh_path.write(project.start_sh)
-        start_sh_path.chmod('u+x')
+        # 国外程序员也不靠谱啊 写个8进制查了好久
+        start_sh_path.chmod(0755)
         stop_sh_path = rem.path('%s/%s' % (project.deploy_dir, 'stop.sh'))
         stop_sh_path.write(project.stop_sh)
-        stop_sh_path.chmod('u+x')
+        # 国外程序员也不靠谱啊 写个8进制查了好久
+        stop_sh_path.chmod(0755)
         rem.close()
     return result
 

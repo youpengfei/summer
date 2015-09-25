@@ -30,3 +30,13 @@ def command_with_result(hostname, key_file=DEFAULT_KEY_FILE, command=None):
         return stdout.readlines()
     finally:
         ssh.close()
+
+
+rem = ParamikoMachine(host="115.28.105.10", keyfile='/Users/youpengfei/.ssh/id_aliyun', user='root')
+path = rem.path("test.sh")
+print path.write("echo hello")
+# print rem.session().run('chmod 755 %s' % str(path) )
+
+# print path.chmod(0755)
+
+print '%o' %0755
