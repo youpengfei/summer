@@ -4,3 +4,4 @@ SQLAlchemy==1.0.8
 Flask-SQLAlchemy==2.0
 MySQL-Python==1.2.5
 Flask-Login==0.3.0
+plumbum==1.5.0
