@@ -45,7 +45,7 @@
 
 <script type="text/javascript">
     $(function () {
-        $.blockUI.defaults.message = '<h1><img src="/static/busy.gif" />任务执行中...</h1>'
+        $.blockUI.defaults.message = '<i class="fa fa-cog fa-spin"></i>'
         $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
         $(".package_btn").click(function () {
             $.get('/build/' + $(this).attr("tag"), function (data) {

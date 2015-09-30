@@ -15,7 +15,6 @@
     <thead>
     <tr>
         <th>项目名称</th>
-        <th>项目地址</th>
         <th>打包方式</th>
         <th>项目目录</th>
         <th>项目发布路径</th>
@@ -28,14 +27,15 @@
     {% for project in project_list %}
     <tr>
         <td>{{project.name}}</td>
-        <td>{{project.repo}}</td>
         <td>{{project.package_type}}</td>
         <td>{{project.project_dir}}</td>
         <td>{{project.deploy_dir}}</td>
         <td>{{project.deploy_name}}</td>
         <td>{{project.description}}</td>
         <td>
-            <button class="delete_btn" tag="{{project.id}}">删除</button>
+            <a class="delete_btn" tag="{{project.id}}" href="#">
+                 <i class="fa fa-trash-o fa-sm"></i>删除
+            </a>
         </td>
 
     </tr>
@@ -51,6 +51,8 @@
             }
         });
     });
+
+
 
 </script>
 {% endblock %}

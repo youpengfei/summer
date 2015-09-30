@@ -1,14 +1,15 @@
 # -*- coding: UTF-8 -*-
 
-from app import app, db
-from app.models import Server
-from flask import request, render_template, redirect
-from ssh_help import command_with_result
+from app import app
+from app.models import Server, db
+from flask import request, render_template, redirect, Blueprint
 
 __author__ = 'youpengfei'
 
+mod = Blueprint('server', __name__)
 
-@app.route("/server/add", methods=['POST', 'GET'])
+
+@mod.route("/add", methods=['POST', 'GET'])
 def server_add():
     if request.method == 'GET':
         return render_template("server_add.html", active="server")
@@ -23,16 +24,15 @@ def server_add():
         return redirect('/server/list')
 
 
-@app.route("/server/list", methods=['POST', 'GET'])
+@mod.route("/list", methods=['POST', 'GET'])
 def server_list():
     servers = Server.query.all()
     return render_template('server_list.html', server_list=servers, active="server")
 
 
-@app.route("/server/log/<int:server_id>")
-def logs(server_id):
+@mod.route("/delete/<int:server_id>")
+def delete(server_id):
     server = Server.query.filter_by(id=server_id).one()
-    result = command_with_result(server.ip, server.key_file,
-                                 'tail -n200 %s/%s ' % (server.deploy_dir, 'logs/gpc-j.log'))
-    print result
-    return render_template('project_log.html', result=result)
+    db.session.delete(server)
+    db.session.commit()
+    return redirect('/server/list')

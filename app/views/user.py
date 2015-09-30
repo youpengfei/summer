@@ -2,10 +2,12 @@
 import hashlib
 from app import app, db, login_manager
 from app.models import User
-from flask import request, redirect, render_template, jsonify
+from flask import request, redirect, render_template, jsonify, Blueprint
 from flask.ext.login import login_user, login_required, current_user, logout_user
 
 __author__ = 'youpengfei'
+
+mod = Blueprint('user', __name__)
 
 
 @app.route('/login', methods=['GET', 'POST'])

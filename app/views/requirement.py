@@ -1,11 +1,13 @@
 from app import app, db
 from app.models import Project, Server, Requirement
-from flask import request, render_template, redirect
+from flask import request, render_template, redirect, Blueprint
 
 __author__ = 'youpengfei'
 
+mod = Blueprint('requirement', __name__)
 
-@app.route("/requirement/add", methods=['POST', 'GET'])
+
+@mod.route("/add", methods=['POST', 'GET'])
 def requirement_add():
     if request.method == 'GET':
         projects = Project.query.all()

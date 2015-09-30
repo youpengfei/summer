@@ -2,12 +2,14 @@
 
 from app import app, db
 from app.models import Project, Requirement
-from flask import request, render_template, redirect, jsonify
+from flask import request, render_template, redirect, jsonify, Blueprint
 
 __author__ = 'youpengfei'
 
+mod = Blueprint('project', __name__)
 
-@app.route("/project/add", methods=['POST', 'GET'])
+
+@mod.route("/add", methods=['POST', 'GET'])
 def project_add():
     if request.method == 'GET':
         return render_template("project_add.html", active="project")
@@ -31,13 +33,13 @@ def project_add():
         return redirect('/project/list')
 
 
-@app.route("/project/list", methods=['GET'])
+@mod.route("/list", methods=['GET'])
 def project_list():
     projects = Project.query.all()
     return render_template('project_list.html', project_list=projects, active="project")
 
 
-@app.route('/project/delete/<int:project_id>')
+@mod.route('/delete/<int:project_id>')
 def project_delete(project_id):
     project = Project.query.filter_by(id=project_id).one()
     requirement_count = Requirement.query.filter_by(project_id=project_id).count()

@@ -5,8 +5,10 @@ from app import app
 from app.models import Project, Server, Requirement
 from flask.ext.login import login_required
 from plumbum.machines.paramiko_machine import ParamikoMachine
-from flask import render_template
+from flask import render_template, Blueprint
 from plumbum import local
+
+mod = Blueprint('main', __name__)
 
 
 @app.route("/")
