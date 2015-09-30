@@ -1,4 +1,4 @@
-#!summer/bin/python
+#!summer-env/bin/python
 from summer import app, db
 
 if __name__ == '__main__':
