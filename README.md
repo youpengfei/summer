@@ -5,3 +5,10 @@
 日后还会支持其他的maven和gradle项目
 
 运行方法
+``` shell 
+chmod u+x setup.py
+./setup.py
+chmod u+x application.py
+./application.py
+```
+    
