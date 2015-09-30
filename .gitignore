@@ -1,7 +1,6 @@
 
 .idea/
 *.pyc
-summber/
-summer/
+summer-env/
 *.db
 .DS_Store

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block title %}
+酷夏打包系统>>  项目列表
+{% endblock %}
+{%block nav%}
+<ul class="nav nav-sidebar">
+    <li id="require_li"><a href="/">需求</a></li>
+    <li id="server_li"><a href="/server/list">服务器配置</a></li>
+    <li id="project_li" class="active"><a href="/project/list">项目信息</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+<a href="/project/add">创建新项目</a>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>项目名称</th>
+        <th>打包方式</th>
+        <th>项目目录</th>
+        <th>项目发布路径</th>
+        <th>项目发布名称</th>
+        <th>项目描述</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for project in project_list %}
+    <tr>
+        <td>{{project.name}}</td>
+        <td>{{project.package_type}}</td>
+        <td>{{project.project_dir}}</td>
+        <td>{{project.deploy_dir}}</td>
+        <td>{{project.deploy_name}}</td>
+        <td>{{project.description}}</td>
+        <td>
+            <a class="delete_btn" tag="{{project.id}}" href="#">
+                 <i class="fa fa-trash-o fa-sm"></i>删除
+            </a>
+        </td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(".delete_btn").click(function () {
+        $.get('/project/delete/' + $(this).attr("tag"), function (data) {
+            alert(data.message)
+            if (data.code === 200) {
+                window.location.href = "/project/list"
+            }
+        });
+    });
+
+
+
+</script>
+{% endblock %}

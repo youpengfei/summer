@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{%block nav%}
+<ul class="nav nav-sidebar">
+    <li id="require_li" class="active"><a href="/">需求</a></li>
+    <li id="server_li"><a href="/server/list">服务器配置</a></li>
+    <li id="project_li"><a href="/project/list">项目信息</a></li>
+</ul>
+{% endblock %}
+
+{% block body %}
+
+<a href="/requirement/add">新增需求</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>需求名称</th>
+        <th>项目名称</th>
+        <th>服务器地址</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for requirement in all_requirement %}
+    <tr>
+        <td>{{requirement.name }}</td>
+        <td>{{requirement.project_name}}</td>
+
+        <td>
+            {% for server_ip in requirement.server_ip_list%}
+            <span class="label label-info">{{server_ip}}</span>
+            {% endfor%}
+        </td>
+        <td>
+            <button class="init_btn" tag="{{requirement.id}}">初始化项目</button>
+            <button class="package_btn" tag="{{requirement.id}}">打包</button>
+            <button class="deploy_btn" tag="{{requirement.id}}">发布</button>
+            <button class="restart_btn" tag="{{requirement.id}}">重启</button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        $.blockUI.defaults.message = '<i class="fa fa-cog fa-spin"></i>'
+        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+        $(".package_btn").click(function () {
+            $.get('/build/' + $(this).attr("tag"), function (data) {
+                alert('打包成功');
+            });
+        });
+
+        $(".deploy_btn").click(function () {
+            $.get('/deploy/' + $(this).attr("tag"), function (data) {
+                alert('发布成功');
+            });
+        });
+
+        $(".restart_btn").click(function () {
+            $.get('/restart/' + $(this).attr("tag"), function (data) {
+                alert('重启成功');
+            });
+        });
+
+        $(".init_btn").click(function () {
+            $.get('/init/' + $(this).attr("tag"), function (data) {
+                alert('初始化成功');
+            });
+        });
+
+    });
+
+
+</script>
+
+{% endblock %}
