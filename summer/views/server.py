@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from flask_login import login_required
 
 from ..models import Server, db
 from flask import request, render_template, redirect, Blueprint
@@ -9,6 +10,7 @@ mod = Blueprint('server', __name__)
 
 
 @mod.route("/add", methods=['POST', 'GET'])
+@login_required
 def server_add():
     if request.method == 'GET':
         return render_template("server_add.html", active="server")
@@ -24,12 +26,14 @@ def server_add():
 
 
 @mod.route("/list", methods=['POST', 'GET'])
+@login_required
 def server_list():
     servers = Server.query.all()
     return render_template('server_list.html', server_list=servers, active="server")
 
 
 @mod.route("/delete/<int:server_id>")
+@login_required
 def delete(server_id):
     server = Server.query.filter_by(id=server_id).one()
     db.session.delete(server)

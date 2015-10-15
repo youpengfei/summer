@@ -24,6 +24,7 @@ def index():
 
 
 @app.route('/build/<int:id>')
+@login_required
 def build_project(id):
     timestamp = str(int(time.time()))
     requirement = Requirement.query.filter_by(id=id).one()
@@ -37,6 +38,7 @@ def build_project(id):
 
 
 @app.route('/deploy/<int:id>')
+@login_required
 def deploy(id):
     requirement = Requirement.query.filter_by(id=id).one()
     project = Project.query.filter_by(id=requirement.project_id).one()
@@ -52,6 +54,7 @@ def deploy(id):
 
 
 @app.route('/init/<int:id>')
+@login_required
 def init_project(id):
     requirement = Requirement.query.filter_by(id=id).one()
     project = Project.query.filter_by(id=requirement.project_id).one()
@@ -74,6 +77,7 @@ def init_project(id):
 
 
 @app.route('/restart/<int:id>')
+@login_required
 def restart(id):
     requirement = Requirement.query.filter_by(id=id).one()
     server_ids = requirement.server_list.split(',')

@@ -1,4 +1,5 @@
 from .. import db
+from flask_login import login_required
 from ..models import Project, Server, Requirement
 from flask import request, render_template, redirect, Blueprint
 
@@ -8,6 +9,7 @@ mod = Blueprint('requirement', __name__)
 
 
 @mod.route("/add", methods=['POST', 'GET'])
+@login_required
 def requirement_add():
     if request.method == 'GET':
         projects = Project.query.all()

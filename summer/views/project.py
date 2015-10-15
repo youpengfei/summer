@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from .. import db
+from flask_login import login_required
 from ..models import Project, Requirement
 from flask import request, render_template, redirect, jsonify, Blueprint
 
@@ -10,6 +11,7 @@ mod = Blueprint('project', __name__)
 
 
 @mod.route("/add", methods=['POST', 'GET'])
+@login_required
 def project_add():
     if request.method == 'GET':
         return render_template("project_add.html", active="project")
@@ -34,12 +36,14 @@ def project_add():
 
 
 @mod.route("/list", methods=['GET'])
+@login_required
 def project_list():
     projects = Project.query.all()
     return render_template('project_list.html', project_list=projects, active="project")
 
 
 @mod.route('/delete/<int:project_id>')
+@login_required
 def project_delete(project_id):
     project = Project.query.filter_by(id=project_id).one()
     requirement_count = Requirement.query.filter_by(project_id=project_id).count()
