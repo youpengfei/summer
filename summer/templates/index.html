@@ -23,21 +23,56 @@
     </thead>
     <tbody>
     {% for requirement in all_requirement %}
-    <tr>
-        <td>{{requirement.name }}</td>
-        <td>{{requirement.project_name}}</td>
+    <td>{{requirement.name }}</td>
+    <td>{{requirement.project_name}}</td>
+    <td>
+        {% for server_ip in requirement.server_ip_list%}
+        {%if loop.index<4%}
+        <span class="label label-info">{{server_ip}}</span>
+        {% endif %}
+        {% endfor%}
+        {% if requirement.server_ip_list |length >3%}
+        <a class="btn btn-primary btn_more" role="button" data-toggle="collapse" href="#" aria-expanded="false"
+           aria-controls="collapseExample" tag="{{requirement.id}}" >
+            更多
+        </a>
 
-        <td>
+        <div class="collapse" tag="{{requirement.id}}">
             {% for server_ip in requirement.server_ip_list%}
+            {%if loop.index>=4%}
             <span class="label label-info">{{server_ip}}</span>
+            {% endif %}
             {% endfor%}
-        </td>
-        <td>
-            <button class="init_btn" tag="{{requirement.id}}">初始化项目</button>
-            <button class="package_btn" tag="{{requirement.id}}">打包</button>
-            <button class="deploy_btn" tag="{{requirement.id}}">发布</button>
-            <button class="restart_btn" tag="{{requirement.id}}">重启</button>
-        </td>
+        </div>
+
+        {% endif %}
+    </td>
+    <td>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true">
+                操作
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li>
+                    <a href="#" class="package_btn" tag="{{requirement.id}}">打包</a>
+                </li>
+                <li>
+                    <a href="#" class="deploy_btn" tag="{{requirement.id}}">发布</a>
+                </li>
+                <li>
+                    <a href="#" class="restart_btn" tag="{{requirement.id}}">重启</a>
+                </li>
+                <li>
+                    <a href="#" class="init_btn" tag="{{requirement.id}}">初始化项目</a>
+                </li>
+            </ul>
+        </div>
+
+
+    </td>
+
+
     </tr>
     {% endfor %}
     </tbody>
@@ -71,9 +106,18 @@
             });
         });
 
+         $(".btn_more").click(function () {
+          var id= $(this).attr('tag');
+             $('.collapse[tag='+id+']').collapse();
+        });
+
     });
 
 
+
+
+
 </script>
+
 
 {% endblock %}

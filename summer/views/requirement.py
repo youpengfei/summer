@@ -25,3 +25,28 @@ def requirement_add():
         db.session.add(requirement)
         db.session.commit()
         return redirect('/')
+
+
+@mod.route("/modify/<int:requirement_id>", methods=['POST', 'GET'])
+@login_required
+def requirement_modify(requirement_id):
+    if request.method == 'GET':
+        projects = Project.query.all()
+        servers = Server.query.all()
+        requirement = Requirement.query.filter_by(id=requirement_id).one()
+        requirement_servers = Server.query.filter(Server.id.in_(requirement.server_list.split(","))).all()
+        requirement.server_ip_list = [x.ip for x in servers]
+        return render_template("requirement_modify.html",
+                               projects=projects,
+                               servers=servers,
+                               requirement=requirement)
+    elif request.method == 'POST':
+        branch_name = request.form['branch_name']
+        servers = request.form.getlist('servers')
+        name = request.form['name']
+        server_list = ",".join(servers)
+        project_id = request.form['project_id']
+        requirement = Requirement(branch_name=branch_name, server_list=server_list, project_id=project_id, name=name)
+        db.session.add(requirement)
+        db.session.commit()
+        return redirect('/')
