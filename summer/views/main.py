@@ -92,6 +92,6 @@ def restart(id):
         server = Server.query.filter_by(id=server_id).one()
         rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
         rem.cwd(project.deploy_dir)
-        rem['start.sh']()
+        rem['sh start.sh']()
         rem.close()
     return result
