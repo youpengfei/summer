@@ -52,7 +52,7 @@ def deploy(id):
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
-        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='tomcat')
+        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
         rem.upload('%s/target/%s' % (project.project_dir, package_name), "%s/%s" % (project.deploy_dir, package_name))
         rem.close()
     return result
@@ -67,7 +67,7 @@ def init_project(id):
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
-        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='tomcat')
+        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
         rem.path(project.deploy_dir).mkdir()
         start_sh_path = rem.path('%s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
         start_sh_path.write(project.start_sh)
@@ -90,7 +90,7 @@ def restart(id):
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
-        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='tomcat')
+        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
         rem['%s/start_for_summer.sh' % project.deploy_dir]()
         rem.close()
     return result
