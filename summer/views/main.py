@@ -34,10 +34,11 @@ def build_project(id):
     project = Project.query.filter_by(id=requirement.project_id).one()
     if not local.path(project.project_dir).exists():
         local['git']['clone', project.repo]()
-    subprocess.call(' cd %s && git checkout %s' % (project.project_dir ,requirement.branch_name), shell=True)
+    subprocess.call(' cd %s && git checkout %s' % (project.project_dir, requirement.branch_name), shell=True)
     subprocess.call(' cd %s && git pull' % project.project_dir, shell=True)
-    subprocess.Popen('source ~/.bash_profile && mvn  -Pprod package -Dmaven.test.skip=true -s settings.xml ',
-                     shell=True)
+    subprocess.Popen(
+        'source ~/.bash_profile && cd  %s && mvn  -Pprod package -Dmaven.test.skip=true -s settings.xml ' % project.project_dir,
+        shell=True)
     return timestamp
 
 
