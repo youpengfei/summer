@@ -30,6 +30,7 @@ class Server(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ip = db.Column(db.String(50))
     port = db.Column(db.Integer)
+    username = db.Column(db.String(50))
     passwd = db.Column(db.String(50))
     key_file = db.Column(db.String(50))
 

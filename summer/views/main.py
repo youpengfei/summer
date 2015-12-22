@@ -37,8 +37,8 @@ def build_project(id):
     subprocess.call(' cd %s && git checkout %s' % (project.project_dir, requirement.branch_name), shell=True)
     subprocess.call(' cd %s && git pull' % project.project_dir, shell=True)
     subprocess.Popen(
-        'source ~/.bash_profile && cd  %s && mvn  -Pprod package -Dmaven.test.skip=true -s settings.xml ' % project.project_dir,
-        shell=True)
+            'source ~/.bash_profile && cd  %s && mvn  -Pprod package -Dmaven.test.skip=true -s settings.xml ' % project.project_dir,
+            shell=True)
     return timestamp
 
 
@@ -52,7 +52,7 @@ def deploy(id):
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
-        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
+        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user=server.username)
         rem.upload('%s/target/%s' % (project.project_dir, package_name), "%s/%s" % (project.deploy_dir, package_name))
         rem.close()
     return result
@@ -67,7 +67,7 @@ def init_project(id):
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
-        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
+        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user=server.username)
         rem.path(project.deploy_dir).mkdir()
         start_sh_path = rem.path('%s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
         start_sh_path.write(project.start_sh)
@@ -90,8 +90,7 @@ def restart(id):
     result = ""
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
-        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user='pengfei.you')
-        rem.cwd(project.deploy_dir)
-        rem['sh start.sh']()
+        rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user=server.username)
+        print rem.session().run("cd %s && ./start.sh" % project.deploy_dir)
         rem.close()
     return result
