@@ -1,5 +1,8 @@
 # -*- coding: UTF-8 -*-
+import os
 import time
+
+import subprocess
 
 from .. import app
 from ..models import Project, Server, Requirement
@@ -29,11 +32,14 @@ def build_project(id):
     timestamp = str(int(time.time()))
     requirement = Requirement.query.filter_by(id=id).one()
     project = Project.query.filter_by(id=requirement.project_id).one()
-    local['rm']["-rf", project.project_dir]()
-    local['git']['clone', '-b', requirement.branch_name, project.repo]()
-    local['mvn'][
-        '-U', 'clean', 'package', '-Dmaven.test.skip=true', '-s', '%s/settings.xml' % project.project_dir, '-f', project.project_dir]()
-
+    if not local.path(project.project_dir).exists():
+        local['git']['clone', project.repo]()
+        local.cwd.chdir(project.project_dir)
+    else:
+        local.cwd.chdir(project.project_dir)
+        local['git']['checkout', requirement.branch_name]()
+        local['git']['pull']()
+    subprocess.Popen('source ~/.bash_profile && mvn  -Pprod package -Dmaven.test.skip=true -X ', shell=True)
     return timestamp
 
 
