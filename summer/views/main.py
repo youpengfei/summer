@@ -39,7 +39,7 @@ def build_project(id):
         local.cwd.chdir(project.project_dir)
         local['git']['checkout', requirement.branch_name]()
         local['git']['pull']()
-    subprocess.Popen('source ~/.bash_profile && mvn  -Pprod package -Dmaven.test.skip=true -X ', shell=True)
+    subprocess.Popen('source ~/.bash_profile && mvn  -Pprod package -Dmaven.test.skip=true -s settings.xml ', shell=True)
     return timestamp
 
 
