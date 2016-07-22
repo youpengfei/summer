@@ -54,3 +54,9 @@ def project_delete(project_id):
         db.session.delete(project)
         db.session.commit()
     return jsonify(message='删除成功', code=200)
+
+
+@mod.route('/config/list', methods=['GET', 'POST'])
+@login_required
+def project_config_list():
+    return render_template('walle/project_config_list.html')

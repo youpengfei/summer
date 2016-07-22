@@ -1,0 +1,139 @@
+{% extends "walle/layout.html" %}
+
+{% block bodyHead %}
+    <div class="breadcrumbs" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="/">
+                            首页 </a>
+                    </li>
+                    <li class="active">上线单列表</li>
+                </ul><!-- .breadcrumb -->
+            </div>
+
+{% endblock %}
+
+{% block body %}
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <form action="http://walle.21bcdtest.com/task/" method="POST">
+                        <input type="hidden" value="QWFwSExaVU8YKzoGKi8/DngUGzp0FDx9CjkKZQYIPHsoFSgAeQk9LA=="
+                               name="_csrf">
+                        <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
+                            <div class="input-group">
+                                <input type="text" name="kw" class="form-control search-query"
+                                       placeholder="上线标题、commit号">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default btn-sm">
+                            Search
+                            <i class="icon-search icon-on-right bigger-110"></i>
+                        </button>
+                    </span>
+                            </div>
+                        </div>
+                    </form>
+                    <a class="btn btn-default btn-sm" href="http://walle.21bcdtest.com/task/submit/">
+                        <i class="icon-pencil align-top bigger-125"></i>
+                        创建上线单 </a>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding clearfix">
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                        <tr>
+                            <th>开发者</th>
+                            <th>项目</th>
+                            <th>上线单标题</th>
+                            <th>上线时间</th>
+                            <th>分支</th>
+                            <th>上线commit号</th>
+                            <th>当前状态</th>
+                            <th>操作</th>
+                        </tr>
+                        <tr>
+                            <td>Anson</td>
+                            <td>迪拜线上环境-21chinamall - 线上环境</td>
+                            <td>1.6.7版本上线，oss storage、全站https、一些翻译错误</td>
+                            <td>2016-06-30 21:07:12</td>
+                            <td>master</td>
+                            <td>1.6.7</td>
+                            <td class="text-success">
+                                上线完成
+                            </td>
+                            <td>
+                                <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <ul class="pagination">
+                    <li class="prev disabled"><span>«</span></li>
+                    <li class="active"><a href="http://walle.21bcdtest.com/task/index?page=1&amp;per-page=10"
+                                          data-page="0">1</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=2&amp;per-page=10" data-page="1">2</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=3&amp;per-page=10" data-page="2">3</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=4&amp;per-page=10" data-page="3">4</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=5&amp;per-page=10" data-page="4">5</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=6&amp;per-page=10" data-page="5">6</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=7&amp;per-page=10" data-page="6">7</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=8&amp;per-page=10" data-page="7">8</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=9&amp;per-page=10" data-page="8">9</a></li>
+                    <li><a href="http://walle.21bcdtest.com/task/index?page=10&amp;per-page=10" data-page="9">10</a>
+                    </li>
+                    <li class="next"><a href="http://walle.21bcdtest.com/task/index?page=2&amp;per-page=10"
+                                        data-page="1">»</a></li>
+                </ul>
+            </div>
+
+            <script type="text/javascript">
+    $(function() {
+        // 发起上线
+        $('.task-operation').click(function() {
+            $this = $(this);
+            $.get("/task/task-operation", {id: $this.data('id'), operation: $this.is(':checked') ? 1 : 0},
+                function(data) {
+                    if (data.code == 0) {
+                        $this.closest('td').prev().text(data.data.status);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            );
+        })
+        // 回滚任务
+        $('.task-rollback').click(function(e) {
+            $this = $(this);
+            $.get('/task/rollback?taskId=' + $this.data('id'), function(o) {
+                if (!o.code) {
+                    window.location.href=o.data.url;
+                } else {
+                    alert(o.msg);
+                }
+            })
+        })
+        // 垃圾任务删除
+        $('.btn-delete').click(function(e) {
+            $this = $(this);
+            if (confirm('确定要删除？')) {
+                $.get('/task/delete', {taskId: $this.data('id')}, function(o) {
+                    if (!o.code) {
+                        $this.closest("tr").remove();
+                    } else {
+                        alert('js delete failed' + o.msg);
+                    }
+                })
+            }
+        })
+    })
+
+            </script>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+{% endblock %}

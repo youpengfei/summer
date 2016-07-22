@@ -62,7 +62,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
     def verify_password(self, password):
-        return hashlib.md5("%s-%s" % (app.config.get("PASSWORD_SALT"), password)).hexdigest() == self.password
+        return hashlib.md5(
+            str("%s-%s" % (app.config.get("PASSWORD_SALT"), password)).encode('utf-8')).hexdigest() == self.password
 
     def __repr__(self):
         return "<User(User='%s', name='%d', email='%s',password='%s' )>" % (

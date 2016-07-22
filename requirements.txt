@@ -2,6 +2,7 @@ Flask==0.10.1
 paramiko==1.15.2
 SQLAlchemy==1.0.8
 Flask-SQLAlchemy==2.0
-MySQL-Python==1.2.5
+PyMySQL==0.7.4
 Flask-Login==0.3.0
 plumbum==1.5.0
+Flask-Principal==0.4.0

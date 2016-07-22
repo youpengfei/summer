@@ -72,11 +72,11 @@ def init_project(id):
         start_sh_path = rem.path('%s/%s' % (project.deploy_dir, 'start_for_summer.sh'))
         start_sh_path.write(project.start_sh)
         # 国外程序员也不靠谱啊 写个8进制查了好久
-        start_sh_path.chmod(0755)
+        start_sh_path.chmod(0o755)
         stop_sh_path = rem.path('%s/%s' % (project.deploy_dir, 'stop.sh'))
         stop_sh_path.write(project.stop_sh)
         # 国外程序员也不靠谱啊 写个8进制查了好久
-        stop_sh_path.chmod(0755)
+        stop_sh_path.chmod(0o755)
         rem.close()
     return result
 
@@ -91,6 +91,6 @@ def restart(id):
     for server_id in server_ids:
         server = Server.query.filter_by(id=server_id).one()
         rem = ParamikoMachine(host=server.ip, keyfile=server.key_file, user=server.username)
-        print rem.session().run("cd %s && ./start.sh" % project.deploy_dir)
+        rem.session().run("cd %s && ./start.sh" % project.deploy_dir)
         rem.close()
     return result
