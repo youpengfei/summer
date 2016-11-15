@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>上线单列表 - walle</title>
+    <title>  {% block title %} {% endblock %} - EVA</title>
     <link href="/static/walle/bootstrap.min.css" rel="stylesheet">
     <link href="/static/walle/font-awesome.min.css" rel="stylesheet">
 
@@ -25,7 +25,7 @@
 
     <!--[if !IE]> -->
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='/static/dist/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+        window.jQuery || document.write("<script src='/static/dist/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
 
     </script>
     <script src="/static/walle/jquery-2.0.3.min.js"></script>
@@ -47,20 +47,25 @@
     <script src="/static/dist/js/respond.min.js"></script>
     <![endif]-->
 
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
 </head>
 
 <body>
 
 <div class="navbar navbar-default" id="navbar">
     <script type="text/javascript">
-        try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
 
     </script>
 
     <div class="navbar-container" id="navbar-container">
         <div class="navbar-header pull-left">
             <a href="javascript:;" class="navbar-brand">
-                <small>Walle</small>
+                <small>EVA</small>
             </a><!-- /.brand -->
         </div><!-- /.navbar-header -->
 
@@ -69,7 +74,7 @@
 
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-                        <img class="nav-user-photo" src="/static/walle/default.jpg">
+                        <img class="nav-user-photo" src="/static/eva.jpg">
                         <span class="user-info" style="top:12px">pengfei</span>
                         <i class="icon-caret-down"></i>
                     </a>
@@ -111,7 +116,10 @@
 
 <div class="main-container" id="main-container">
     <script type="text/javascript">
-        try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
 
     </script>
 
@@ -122,7 +130,10 @@
 
         <div class="sidebar" id="sidebar">
             <script type="text/javascript">
-                try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                try {
+                    ace.settings.check('sidebar', 'fixed')
+                } catch (e) {
+                }
 
             </script>
 
@@ -188,7 +199,9 @@
                    data-icon2="icon-double-angle-right"></i>
             </div>
             <script type="text/javascript">
-                try{ace.settings.check('sidebar' , 'collapsed')}catch(e){
+                try {
+                    ace.settings.check('sidebar', 'collapsed')
+                } catch (e) {
                     console.log(e);
                 }
 
@@ -212,7 +225,10 @@
 <!-- basic scripts -->
 
 <script type="text/javascript">
-    if("ontouchend" in document) document.write("<script src='/static/dist/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    if ("ontouchend" in document) {
+        document.write(
+                "<script src='/static/dist/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    }
 
 </script>
 <script src="/static/walle/typeahead-bs2.min.js"></script>
@@ -241,15 +257,17 @@
 <!-- inline scripts related to this page -->
 <script>
 
-    jQuery(function($) {
+    jQuery(function ($) {
         $(".chosen-select").chosen();
         $('#chosen-multiple-style').on('click', function (e) {
             var target = $(e.target).find('input[type=radio]');
             var which = parseInt(target.val());
-            if (which == 2) $('#form-field-select-4').addClass('tag-input-style');
-            else $('#form-field-select-4').removeClass('tag-input-style');
+            if (which == 2) {
+                $('#form-field-select-4').addClass('tag-input-style');
+            } else {
+                $('#form-field-select-4').removeClass('tag-input-style');
+            }
         });
-
 
     })
 

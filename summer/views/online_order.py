@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-from flask import request, render_template, redirect, jsonify, Blueprint
+from flask import render_template, Blueprint
 
 __author__ = 'youpengfei'
 

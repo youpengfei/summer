@@ -1,0 +1,177 @@
+<div class="modal show " id="myModal" style="display: block">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    迪拜测试环境-21chinamall配置项目 </h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="profile-user-info">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 项目名字:</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 项目环境:</div>
+
+                        <div class="profile-info-value">
+                            <i class="icon-map-marker light-orange bigger-110"></i>
+                            <span> {% if project.level is sameas 1 %} 测试
+                            {% elif project.level is sameas 2 %} 预发布
+                            {% else %}线上  {% endif %}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 地址:</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.repo_url }}</span>
+                        </div>
+                    </div>
+
+                    <!-- 宿主机 配置-->
+                    <h4 class="lighter"><i class="icon-dashboard orange"></i>宿主机</h4>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 代码检出仓库</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.deploy_from }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 排除文件</div>
+
+                        <div class="profile-info-value">{{ project.excludes }} </span>
+                        </div>
+                    </div>
+                    <!-- 宿主机 配置 end-->
+
+                    <!-- 目标机器 配置-->
+                    <h4 class="lighter"><i class="icon-cloud-upload orange"></i>机器列表</h4>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 用户</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.release_user }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> webroot</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.release_to }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 发布版本库</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.release_liberary }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 机器列表</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.hosts }}</span>
+                        </div>
+                    </div>
+                    <!-- 目标机器 配置 end-->
+
+                    <!-- 任务配置-->
+
+                    <h4 class="lighter"><i class="icon-tasks orange"></i>高级任务</h4>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> pre_deploy</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.pre_deploy }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> post_deploy</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.post_deploy }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> pre_release</div>
+
+                        <div class="profile-info-value">
+                            <span> {{ project.pre_release }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> post_release</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.post_release }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> post_release_delay</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.post_release_delay }}</span>
+                        </div>
+                    </div>
+                    <!-- 目标机器 配置 end-->
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 分支/tag上线:</div>
+
+                        <div class="profile-info-value">
+                            <span>{{ project.repo_mode }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 是否开启审核:</div>
+
+                        <div class="profile-info-value">
+                            <span>{% if  project.audit is sameas 1 %}是 {% else %} 否{% endif %}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 是否开启Ansible:</div>
+
+                        <div class="profile-info-value">
+                            <span>{% if  project.ansible is sameas 1 %}是 {% else %} 否{% endif %}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 是否启用:</div>
+
+                        <div class="profile-info-value">
+                            <span>{% if  project.status is sameas 1 %}是 {% else %} 否{% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+

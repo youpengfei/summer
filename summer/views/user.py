@@ -1,10 +1,11 @@
 # -*- coding: UTF-8 -*-
 import hashlib
 
-from .. import app, db, login_manager
-from ..models import User
 from flask import request, redirect, render_template, jsonify, Blueprint
 from flask.ext.login import login_user, login_required, current_user, logout_user
+
+from .. import app, db, login_manager
+from ..models import User
 
 __author__ = 'youpengfei'
 
@@ -26,6 +27,17 @@ def login():
 
 @mod.route('/user/list', methods=['GET', 'POST'])
 def user_list():
+    users = User.query.all()
+    return render_template('walle/user_list.html', users=users)
+
+
+@mod.route('/user/add', methods=['GET'])
+def user_add():
+    return render_template('walle/user_add.html')
+
+
+@mod.route('/user/add', methods=['POST'])
+def add_user():
     return render_template('walle/user_list.html')
 
 
