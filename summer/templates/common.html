@@ -1,0 +1,36 @@
+{% macro pagination(page,page_count,url) %}
+    <ul class="pagination">
+        <li class="prev {% if page<=1 %}disabled {% endif %}">
+            {% if page>1 %}
+                <a href="{{ url }}?page={{ page-1 }}"
+                   data-page="1">«</a>
+            {% else %}
+                <span>«</span>
+            {% endif %}
+        </li>
+        {% for n in range(1,11) %}
+            {% if page-6<=0 %}
+                {% if n<=page_count %}
+                    <li    {% if page==n %} class="active" {% endif %}><a href="{{ url }}?page={{ n }}"
+                                                                          data-page="1">{{ n }}</a>
+                    </li>
+                {% endif %}
+            {% elif page-(6-n) <page_count %}
+                <li {% if page==page-(6-n) %} class="active" {% endif %}><a
+                        href="{{ url }}?page={{ page-(6-n) }}" data-page="1">{{ page-(6-n) }}</a>
+                </li>
+            {% endif %}
+
+        {% endfor %}
+
+        <li class="next  {% if page> page_count %}disabled {% endif %}">
+            {% if page< page_count %}
+                <a href="{{ url }}?page={{ page+1 }}"
+                   data-page="1">»</a>
+            {% else %}
+                <span>»</span>
+            {% endif %}
+        </li>
+    </ul>
+
+{% endmacro %}

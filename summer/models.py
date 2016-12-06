@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 import bcrypt
 from flask.ext.login import UserMixin
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 from . import db
 
@@ -36,9 +38,15 @@ class Project(db.Model):
     keep_version_num = db.Column(db.Integer)
     created_at = db.Column(db.Date)
     updated_at = db.Column(db.Date)
+    tasks = relationship("Task", back_populates="project")
 
     def __repr__(self, *args, **kwargs):
         return super().__repr__(*args, **kwargs)
+
+
+projects = db.Table('group',
+                    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                    db.Column('project_id', db.Integer, db.ForeignKey('project.id')))
 
 
 class User(db.Model, UserMixin):
@@ -56,6 +64,9 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
     realname = db.Column(db.String(32))
+    tasks = relationship("Task", back_populates="user")
+    projects = db.relationship('Project', secondary=projects,
+                               backref=db.backref('users', lazy='dynamic'))
 
     def verify_password(self, password):
         return bcrypt.hashpw(password.encode('utf-8'), self.password_hash.encode('utf-8')) == self.password_hash.encode(
@@ -64,16 +75,18 @@ class User(db.Model, UserMixin):
 
 class Group(db.Model):
     __tablename__ = 'group'
+    __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    project_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer,db.ForeignKey('project.id'))
     type = db.Column(db.Integer)
 
 
 class Task(db.Model):
     __tablename__ = 'task'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, ForeignKey('project.id'))
     action = db.Column(db.Integer)
     status = db.Column(db.SmallInteger)
     title = db.Column(db.String(100))
@@ -86,6 +99,8 @@ class Task(db.Model):
     enable_rollback = db.Column(db.SmallInteger)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
+    user = relationship("User", back_populates="tasks")
+    project = relationship("Project", back_populates="tasks")
 
 
 class Record(db.Model):

@@ -1,4 +1,4 @@
-{% extends "walle/layout.html" %}
+{% extends "layout.html" %}
 
 
 {% block bodyHead %}
@@ -23,8 +23,6 @@
                 <div class="box">
                     <div class="box-header">
                         <form action="/user/list" method="POST">
-                            <input type="hidden" value="TTZKTmQza0QCUBwkEAYgDyNYHiBcXy0JFwEAA1B.XTYmWTgrXAQkIw=="
-                                   name="_csrf">
                             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
                                 <div class="input-group">
                                     <input type="text" name="kw" class="form-control search-query" placeholder="用户或邮箱">
@@ -69,7 +67,7 @@
                                         <div class="nav">
                                             <li>
                                                 <a data-toggle="dropdown" class="dropdown-toggle"
-                                                   href="javascript:void();">
+                                                   href="javascript:void(0);">
                                                     <i class="icon-cog"></i>&nbsp;操作 <i
                                                         class="icon-caret-down bigger-110 width-auto"></i>
                                                 </a>

@@ -14,11 +14,12 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 
-from .views import requirement, project, server, main, user,online_order
+from .views import requirement, project, server, main, user,task
+
 
 # app.register_blueprint(requirement.mod, url_prefix='/requirement')
 app.register_blueprint(project.mod, url_prefix='/project')
 # app.register_blueprint(server.mod, url_prefix='/server')
-app.register_blueprint(online_order.mod, url_prefix='/online_order')
-# app.register_blueprint(main.mod)
+app.register_blueprint(task.mod, url_prefix='/task')
+app.register_blueprint(main.mod)
 app.register_blueprint(user.mod)

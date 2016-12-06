@@ -1,64 +1,269 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<!-- saved from url=(0027)/ -->
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>  {% block title %} {% endblock %} - EVA</title>
+    <link href="/static/walle/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/walle/font-awesome.min.css" rel="stylesheet">
 
-    <title> {% block title %}酷夏打包系统{% endblock %}</title>
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="/static/dist/css/font-awesome-ie7.min.css"/>
+    <![endif]-->
 
-    <!-- Bootstrap core CSS -->
-    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
-     <link href="{{ url_for('static', filename='font-awesome-4.4.0/css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- ace styles -->
+    <link rel="stylesheet" href="/static/walle/chosen.css">
+    <link rel="stylesheet" href="/static/walle/ace.min.css">
+    <link rel="stylesheet" href="/static/walle/ace-rtl.min.css">
+    <link rel="stylesheet" href="/static/walle/ace-skins.min.css">
+    <link rel="stylesheet" href="/static/walle/walle.css">
 
-    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="//cdn.bootcss.com/jquery.blockUI/2.66.0-2013.10.09/jquery.blockUI.min.js"></script>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/static/dist/css/ace-ie.min.css"/>
+    <![endif]-->
+
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='/static/dist/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+
+    </script>
+    <script src="/static/walle/jquery-2.0.3.min.js"></script>
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+    <script src='/static/dist/js/jquery-1.10.2.min.js'> <script>;
+    <![endif]-->
+
+
+    <!-- ace settings handler -->
+    <script src="/static/walle/ace-extra.min.js"></script>
+    <script src="/static/walle/bootstrap.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+    <script src="/static/dist/js/html5shiv.js"></script>
+    <script src="/static/dist/js/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">酷夏打包系统</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            {% if current_user.is_authenticated %}
-            <ul class="dropdown nav navbar-nav navbar-right">
-                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Hi {{ current_user.name }}! <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/logout">退出</a></li>
-                        <li><a href="/password/change">修改密码</a></li>
+<div class="navbar navbar-default" id="navbar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <div class="navbar-header pull-left">
+            <a href="javascript:;" class="navbar-brand">
+                <small>EVA</small>
+            </a><!-- /.brand -->
+        </div><!-- /.navbar-header -->
+
+        <div class="navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+
+
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="/static/eva.jpg">
+                        <span class="user-info" style="top:12px">     {{ current_user.realname }}</span>
+                        <i class="icon-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <!-- 设置功能暂无
+                        <li>
+                            <a href="javascript:;">
+                                <i class="icon-cog"></i>
+                                设置
+                            </a>
+                        </li>
+                        -->
+
+                        <li>
+                            <a href="/user/{{ current_user.id }}">
+                                <i class="icon-user"></i>
+                                个人资料 </a>
+                        </li>
+                        <li>
+                            <a href="/user/reset-password">
+                                <i class="icon-key"></i>
+                                修改密码 </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="/logout">
+                                <i class="icon-off"></i>
+                                退出 </a>
+                        </li>
                     </ul>
                 </li>
-            </ul>
-            {% endif %}
-        </div>
-    </div>
-</nav>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            {%block nav%}
-            <ul class="nav nav-sidebar">
-                <li id="require_li" class="active"><a href="/">需求</a></li>
-                <li id="server_li"><a href="/server/list">服务器配置</a></li>
-                <li id="project_li"><a href="/project/list">项目信息</a></li>
-            </ul>
-            {% endblock %}
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            {% block body %}{% endblock %}
-        </div>
-    </div>
+            </ul><!-- /.ace-nav -->
+        </div><!-- /.navbar-header -->
+    </div><!-- /.container -->
 </div>
-</body>
-</html>
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="javascript:;">
+            <span class="menu-text"></span>
+        </a>
+
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'fixed')
+                } catch (e) {
+                }
+
+            </script>
+
+            <ul class="nav nav-list">
+                <li>
+                    <a href="/project/config/list">
+                        <i class="icon-cogs"></i>
+                        <span class="menu-text">
+                            项目配置                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/#" class="dropdown-toggle">
+                        <i class="icon-group"></i>
+                        <span class="menu-text"> 用户管理 </span>
+
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu" style="display: none;">
+                        <li>
+                            <a href="/user/list">
+                                <i class="icon-double-angle-right"></i>
+                                用户列表
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/user/add">
+                                <i class="icon-double-angle-right"></i>
+                                添加用户
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="/task/list">
+                        <i class="icon-list-alt"></i>
+                        <span class="menu-text">
+                            我的上线单
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/task/new">
+                        <i class="icon-cloud-upload"></i>
+                        <span class="menu-text">
+                            提交上线单                        </span>
+                    </a>
+                </li>
+
+            </ul><!-- /.nav-list -->
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-right" data-icon1="icon-double-angle-left"
+                   data-icon2="icon-double-angle-right"></i>
+            </div>
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'collapsed')
+                } catch (e) {
+                    console.log(e);
+                }
+
+            </script>
+        </div>
+
+        <div class="main-content">
+            {% block bodyHead %} {% endblock %}
+
+            {% block body %}{% endblock %}
+
+        </div><!-- /.main-content -->
+
+    </div><!-- /.main-container-inner -->
+
+    <a href="javascript:;" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<script type="text/javascript">
+    if ("ontouchend" in document) {
+        document.write(
+                "<script src='/static/dist/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    }
+
+</script>
+<script src="/static/walle/typeahead-bs2.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+<script src="/static/dist/js/excanvas.min.js"></script>
+<![endif]-->
+
+<script src="/static/walle/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="/static/walle/jquery.ui.touch-punch.min.js"></script>
+<script src="/static/walle/jquery.slimscroll.min.js"></script>
+<script src="/static/walle/jquery.easy-pie-chart.min.js"></script>
+<script src="/static/walle/jquery.sparkline.min.js"></script>
+<script src="/static/walle/jquery.flot.min.js"></script>
+<script src="/static/walle/chosen.jquery.min.js"></script>
+<script src="/static/walle/jquery.flot.pie.min.js"></script>
+<script src="/static/walle/jquery.flot.resize.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="/static/walle/ace-elements.min.js"></script>
+<script src="/static/walle/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+<script>
+
+    jQuery(function ($) {
+        $(".chosen-select").chosen();
+        $('#chosen-multiple-style').on('click', function (e) {
+            var target = $(e.target).find('input[type=radio]');
+            var which = parseInt(target.val());
+            if (which == 2) {
+                $('#form-field-select-4').addClass('tag-input-style');
+            } else {
+                $('#form-field-select-4').removeClass('tag-input-style');
+            }
+        });
+
+    })
+
+</script>
+
+
 
