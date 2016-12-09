@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% import "common.html" as common %}
+{% block title %}
+    上线单列表
+{% endblock %}
 
 {% block bodyHead %}
     <div class="breadcrumbs" id="breadcrumbs">
@@ -21,9 +24,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <form action="http://walle.21bcdtest.com/task/" method="POST">
-                            <input type="hidden" value="QWFwSExaVU8YKzoGKi8/DngUGzp0FDx9CjkKZQYIPHsoFSgAeQk9LA=="
-                                   name="_csrf">
+                        <form action="/task/list" method="GET">
                             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
                                 <div class="input-group">
                                     <input type="text" name="kw" class="form-control search-query"
@@ -37,7 +38,7 @@
                                 </div>
                             </div>
                         </form>
-                        <a class="btn btn-default btn-sm" href="http://walle.21bcdtest.com/task/submit/">
+                        <a class="btn btn-default btn-sm" href="/task/new">
                             <i class="icon-pencil align-top bigger-125"></i>
                             创建上线单 </a>
                     </div><!-- /.box-header -->
@@ -88,6 +89,29 @@
                                     {% endif %}
                                     <td>
                                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                            {% if task.status==3 %}
+                                                <a href="javascript:void(0);" class="brown task-rollback"
+                                                   data-id="{{ task.id }}">
+                                                    <i class="icon-reply bigger-130"></i>
+                                                    回滚 </a>
+                                            {% endif %}
+
+                                            {% if task.status==1  %}
+                                                <label>
+                                                    <input class="ace ace-switch ace-switch-5 task-operation" checked=""
+                                                           type="checkbox" data-id="910">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                                <!-- 通过审核可以上线的任务-->
+                                                <a href="/task/deploy?taskId={{ task.id }}" class="green">
+                                                    <i class="icon-cloud-upload text-success bigger-130"
+                                                       data-id="910"></i>
+                                                    上线 </a>
+                                                <!-- 回滚的任务不能再回滚-->
+                                                <a class="red btn-delete" href="javascript:;" data-id="{{ task.id }}">
+                                                    <i class="icon-trash bigger-130"></i>
+                                                    删除 </a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>
@@ -130,7 +154,7 @@
                             $this = $(this);
                             if (confirm('确定要删除？')) {
                                 $.get('/task/delete', {taskId: $this.data('id')}, function (o) {
-                                    if (!o.code) {
+                                    if (o.code == 200) {
                                         $this.closest("tr").remove();
                                     } else {
                                         alert('js delete failed' + o.msg);

@@ -1,9 +1,12 @@
 # -*- coding: UTF-8 -*-
+from datetime import datetime
+
 import bcrypt
 from flask.ext.login import UserMixin
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
+import git_utils
 from . import db
 
 __author__ = 'youpengfei'
@@ -39,6 +42,12 @@ class Project(db.Model):
     created_at = db.Column(db.Date)
     updated_at = db.Column(db.Date)
     tasks = relationship("Task", back_populates="project")
+
+    def get_deploy_workspace(self, version=''):
+        deploy_from = self.deploy_from
+        level = self.level
+        project_name = git_utils.get_project_name(self.repo_url)
+        return "%s/%s-%s-%s" % (deploy_from, project_name, level, version)
 
     def __repr__(self, *args, **kwargs):
         return super().__repr__(*args, **kwargs)
@@ -77,8 +86,8 @@ class Group(db.Model):
     __tablename__ = 'group'
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
-    project_id = db.Column(db.Integer,db.ForeignKey('project.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
     type = db.Column(db.Integer)
 
 
@@ -87,7 +96,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey('user.id'))
     project_id = db.Column(db.Integer, ForeignKey('project.id'))
-    action = db.Column(db.Integer)
+    action = db.Column(db.Integer, default=0)
     status = db.Column(db.SmallInteger)
     title = db.Column(db.String(100))
     link_id = db.Column(db.String(20))
@@ -96,11 +105,19 @@ class Task(db.Model):
     branch = db.Column(db.String(100))
     file_transmission_mode = db.Column(db.SmallInteger)
     file_list = db.Column(db.Text)
-    enable_rollback = db.Column(db.SmallInteger)
-    created_at = db.Column(db.DateTime)
-    updated_at = db.Column(db.DateTime)
+    enable_rollback = db.Column(db.SmallInteger, default=1)
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, default=datetime.now())
     user = relationship("User", back_populates="tasks")
     project = relationship("Project", back_populates="tasks")
+
+    def get_deploy_files(self):
+        if self.file_transmission_mode == 1:
+            return '.'
+        elif self.file_transmission_mode == 2 and self.file_list:
+            return ' '.join(self.file_list.split('\n')).strip(" ")
+        else:
+            return None
 
 
 class Record(db.Model):
@@ -108,7 +125,7 @@ class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     task_id = db.Column(db.Integer)
-    status = db.Column(db.SmallInteger)
+    status = db.Column(db.SmallInteger, default=1)
     action = db.Column(db.SmallInteger)
     command = db.Column(db.Text)
     duration = db.Column(db.Integer)

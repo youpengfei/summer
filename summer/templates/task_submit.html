@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 
+{% block title %}
+    提交上线单
+{% endblock %}
 
 {% block bodyHead %}
     <div class="breadcrumbs" id="breadcrumbs">
@@ -9,7 +12,7 @@
                 <a href="/user/list">
                     首页 </a>
             </li>
-            <li class="active">提交上线单</li>
+            <li class="active">提交上线单({{ project.name }})</li>
         </ul><!-- .breadcrumb -->
     </div>
 
@@ -21,23 +24,22 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <form id="login-form" action="/task/submit?projectId=3" method="post">
-
+                    <form id="login-form" action="/task/submit?projectId={{ project.id }}" method="POST">
                         <div class="box-body">
                             <div class="form-group field-task-title required">
                                 <label class="control-label bolder blue" for="task-title">上线单标题</label>
-                                <input type="text" id="task-title" class="form-control" name="Task[title]">
+                                <input type="text" id="task-title" class="form-control" name="title" >
 
                                 <div class="help-block"></div>
                             </div>
                             <!-- 分支选取 -->
                             <div class="form-group">
-                                <label>选取分支 <a class="show-tip icon-refresh green" href="javascript:;"></a>
+                                <label>选取分支 <a class="show-tip icon-refresh green" href="javascript:void(0);"></a>
                                     <span class="tip">查看所有分支</span>
                                     <i class="get-branch icon-spinner icon-spin orange bigger-125"
                                        style="display: none"></i>
                                 </label>
-                                <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch"
+                                <select name="branch" aria-hidden="true" tabindex="-1" id="branch"
                                         class="form-control select2 select2-hidden-accessible">
                                     {% for branch in branch_list %}
                                         <option value="{{ branch }}" selected="">{{ branch }}</option>
@@ -51,10 +53,7 @@
                                 <label class="control-label bolder blue" for="task-commit_id">版本选取
                                     <i class="get-history icon-spinner icon-spin orange bigger-125"
                                        style="display: none;"></i></label>
-                                <select id="task-commit_id" class="form-control" name="Task[commit_id]">
-                                    {% for commit in commit_list %}
-                                        <option value="commit">{{ commit }}</option>
-                                    {% endfor %}
+                                <select id="task-commit_id" class="form-control" name="commitId">
 
                                 </select>
 
@@ -68,7 +67,7 @@
                                      data-rel="tooltip" data-title="全量上线所有文件, 删除不在代码仓库中的文件" data-placement="right"
                                      data-original-title="" title="">
                                     <label>
-                                        <input name="Task[file_transmission_mode]" value="1" checked="checked"
+                                        <input name="fileTransmissionMode" value="1" checked="checked"
                                                type="radio" class="ace">
                                         <span class="lbl">全量上线</span>
                                     </label>
