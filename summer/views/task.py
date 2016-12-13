@@ -38,7 +38,7 @@ def online_orders():
 def add_online_order_page():
     projects = current_user.projects
     dev_projects = list(filter(lambda x: x.level == DeployEnv.DEV.value, projects))
-    pre_release_projects = list(filter(lambda x: x.level == DeployEnv.PRE_RELEASE.value, projects))
+    pre_release_projects = list(filter(lambda x: x.level == DeployEnv.PRERELEASE.value, projects))
     prod_projects = list(filter(lambda x: x.level == DeployEnv.PROD.value, projects))
 
     return render_template('task_new.html',
