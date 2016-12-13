@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+{% block title %}
+    项目成员管理
+{% endblock %}
+
+{% block bodyHead %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="/conf/">
+                    首页 </a>
+            </li>
+            <li class="active">项目成员管理</li>
+        </ul><!-- .breadcrumb -->
+    </div>
+
+
+{% endblock %}
+
+{% block body %}
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="row col-sm-4">
+                        <h4 class="pink">
+                            <i class="icon-hand-right green"></i>
+                            <a href="#modal-form" role="button" class="blue" data-toggle="modal"> <span
+                                    class="green">{{ project.name }}</span>
+                                用户组关系 </a>
+                        </h4>
+                    </div>
+
+
+                    <div class="row col-sm-4" style="margin-top: 5px;float:right;">
+                        <form id="login-form" action="/project/config/group/?projectId={{ project.id }}" method="post">
+
+                            <div class="input-group">
+                                <select multiple="" name="user[]" class="width-80 chosen-select"
+                                        id="form-field-select-4" data-placeholder="通过邮箱查找用户">
+                                    <option value="">&nbsp;</option>
+
+                                    {% for user in all_users %}
+                                        <option value="{{ user.id }}">
+                                            {{ user.username }}-{% if user.role is sameas 1 %}开发者{% else %}
+                                            管理员{% endif %}</option>
+                                    {% endfor %}
+
+                                </select>
+                                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-purple btn-sm" style="height: 29px;padding-top: 1px;">
+                        添加                        <i class="icon-search icon-on-right bigger-110"></i>
+                    </button>
+                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 hr hr-18 dotted hr-double"></div>
+
+                <div class="row col-sm-12 profile-users clearfix" id="relation-users">
+                    {% for user in users %}
+                        <div class="itemdiv memberdiv">
+                            <div class="inline position-relative">
+                                <div class="user">
+                                    <a href="javascript:;">
+                                        <img src="/static/eva.jpg">
+                                    </a>
+                                </div>
+
+                                <div class="body">
+                                    <div class="name">
+                                        <i class="icon-user-md light-orange bigger-110" title="审核管理员可审核上线单"></i>
+                                        {{ user.realname }} <a href="javascript:void(0)" class="pink remove-relation"
+                                                               data-id="9">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                    </div>
+                                </div>
+
+                                <div class="popover" style="min-width:200px">
+                                    <div class="arrow"></div>
+
+                                    <div class="popover-content">
+                                        <div class="bolder">{{ user.email }}</div>
+                                        <div class="hr dotted hr-8"></div>
+
+                                        <div class="tools action-buttons">
+                                            <a href="javascript:;" class="bind-admin" data-id="9" data-type="0"
+                                               title="审核管理员可审核上线单">
+                                                <i class="icon-user-md light-orange bigger-110"></i>
+                                                取消审核管理员 </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <script>
+                    jQuery(function ($) {
+                        // 组关系删除
+                        $('.remove-relation').click(function (e) {
+                            $this = $(this);
+                            if (confirm('确定要删除？')) {
+                                $.get('/conf/delete-relation?id=' + $this.data('id'), function (o) {
+                                    if (!o.code) {
+                                        $this.closest(".memberdiv").remove();
+                                    } else {
+                                        alert('删除失败：' + o.msg);
+                                    }
+                                })
+                            }
+                        });
+                        // 组关系成员设为管理员
+                        $('.bind-admin').click(function (e) {
+                            $this = $(this);
+                            var url = '/conf/edit-relation'
+                                      + '?id=' + $this.data('id')
+                                      + '&type=' + $this.data('type');
+                            $.get(url, function (o) {
+                                if (!o.code) {
+                                    location.reload()
+                                } else {
+                                    alert('设置失败: ' + o.msg);
+                                }
+                            })
+                        });
+                        // 浮出层
+                        $('#relation-users .memberdiv').on('mouseenter', function () {
+                            var $this = $(this);
+                            var place = 'right';
+
+                            $this.find('.popover').removeClass('right left').addClass(place);
+                        }).on('click', function () {
+                            return false;
+                        });
+
+                    })
+                </script>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.page-content -->
+
+{% endblock %}

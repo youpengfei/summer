@@ -1,0 +1,385 @@
+
+
+{% extends "layout.html" %}
+
+{% block title %}
+    新增配置
+{% endblock %}
+
+{% block bodyHead %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="/user/list">
+                    首页 </a>
+            </li>
+            <li class="active">新增配置</li>
+        </ul><!-- .breadcrumb -->
+    </div>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="box">
+                    <form id="config-form" action="/project/config/new" method="post">
+                        <div class="box-body">
+                            <div class="form-group field-project-name required">
+                                <label class="text-right bolder blue col-xs-1" for="project-name">项目名字</label>
+                                <input type="text" id="project-name" class="col-xs-11" name="name">
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group field-project-level required">
+                                <label class="text-right bolder blue col-xs-1" for="project-level">项目环境</label>
+                                <select id="project-level" class="col-xs-11" name="level">
+                                    <option value="1" selected="">测试环境</option>
+                                    <option value="2">预发布环境</option>
+                                    <option value="3">线上环境</option>
+                                </select>
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <!-- 地址 配置-->
+                            <div class="form-group field-project-repo_url required">
+                                <label class="text-right bolder blue col-xs-1" for="project-repo_url">地址</label>
+                                <input type="text" id="project-repo_url" class="col-xs-11" name="repo_url"
+                                       placeholder="git@github.com:meolu/walle-web.git" data-placement="top"
+                                       data-rel="tooltip"
+                                       data-title="支持git。git格式:ssh-url，需要把宿主机php进程用户的ssh-key加入git信任"
+                                       data-original-title="" title="">
+
+                                <div class="help-block"></div>
+                            </div>        <!-- 地址 配置 end-->
+                            <div class="clearfix"></div>
+                            <div class="form-group field-project-repo_type">
+                                <label class="control-label" for="project-repo_type"></label>
+                                <input type="hidden" id="project-repo_type" class="form-control"
+                                       name="repo_type">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <!-- 宿主机 配置-->
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="widget-box transparent">
+                                        <div class="widget-header widget-header-flat">
+                                            <h4 class="lighter">
+                                                <i class="icon-dashboard orange"></i>
+                                                宿主机 </h4>
+                                            <div class="widget-toolbar">
+                                                <a href="javascript:void(0);" data-action="collapse">
+                                                    <i class="icon-chevron-up"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <div class="form-group field-project-deploy_from required">
+                                                    <label class="text-right bolder" for="project-deploy_from">代码检出仓库
+                                                        <small><i class="light-blue icon-asterisk"></i></small>
+                                                    </label>
+                                                    <input type="text" id="project-deploy_from" class="form-control"
+                                                           name="deploy_from" value="/data/checkout"
+                                                           placeholder="/data/www/deploy" data-placement="top"
+                                                           data-rel="tooltip" data-title="代码的检出存放路径"
+                                                           data-original-title="" title="">
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-excludes">
+                                                    <label class="text-right bolder" for="project-excludes">排除文件</label>
+                                                    <textarea id="project-excludes" class="form-control"
+                                                              name="excludes" rows="10" placeholder=".git
+.svn
+README.md" data-placement="top" data-rel="tooltip" data-title="剔除不上线的文件、目录，每行一个" data-original-title="" title="">.git
+.gitignore</textarea>
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 宿主机 配置 end-->
+                                <!-- 目标机器 配置-->
+                                <div class="col-sm-4">
+                                    <div class="widget-box transparent">
+                                        <div class="widget-header widget-header-flat">
+                                            <h4 class="lighter">
+                                                <i class="icon-cloud-upload orange"></i>
+                                                目标机器 </h4>
+                                            <div class="widget-toolbar">
+                                                <a href="javascript:;" data-action="collapse">
+                                                    <i class="icon-chevron-up"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <div class="form-group field-project-release_user required">
+                                                    <label class="text-right bolder" for="project-release_user">用户
+                                                        <small><i class="light-blue icon-asterisk"></i></small>
+                                                    </label>
+                                                    <input type="text" id="project-release_user" class="form-control"
+                                                           name="release_user" value="root" placeholder="www"
+                                                           data-placement="top" data-rel="tooltip"
+                                                           data-title="代码的部署的用户，一般是运行的服务的用户，如php进程用户www"
+                                                           data-original-title="" title="">
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-release_to required">
+                                                    <label class="text-right bolder" for="project-release_to">webroot
+                                                        <small><i class="light-blue icon-asterisk"></i></small>
+                                                    </label>
+                                                    <input type="text" id="project-release_to" class="form-control"
+                                                           name="release_to"
+                                                           placeholder="/data/www/walle" data-placement="top"
+                                                           data-rel="tooltip"
+                                                           data-title="代码的最终部署路径，请不要在目标机新建此目录，walle会自动生成此软链，正确设置父目级录即可"
+                                                           data-original-title="" title="">
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-release_library required">
+                                                    <label class="text-right bolder" for="project-release_library">发布版本库
+                                                        <small><i class="light-blue icon-asterisk"></i></small>
+                                                    </label>
+                                                    <input type="text" id="project-release_library" class="form-control"
+                                                           name="release_library" value="/data/release"
+                                                           placeholder="/data/releases" data-placement="top"
+                                                           data-rel="tooltip"
+                                                           data-title="代码发布的版本库，每次发布更新webroot的软链到当前最新版本"
+                                                           data-original-title="" title="">
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-keep_version_num required">
+                                                    <label class="text-right bolder" for="project-keep_version_num">版本保留数
+                                                        <small><i class="light-blue icon-asterisk"></i></small>
+                                                    </label>
+                                                    <input type="text" id="project-keep_version_num"
+                                                           class="form-control"
+                                                           name="keep_version_num" value="20" placeholder="20"
+                                                           data-placement="top" data-rel="tooltip"
+                                                           data-title="过多的历史版本将被删除，只可回滚保留的版本" data-original-title=""
+                                                           title="">
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-hosts required">
+                                                    <label class="text-right bolder" for="project-hosts">机器列表
+                                                        <small><i class="light-blue icon-asterisk"></i></small>
+                                                    </label>
+                                                    <textarea id="project-hosts" class="form-control"
+                                                              name="hosts"
+                                                              rows="5" placeholder="192.168.0.1
+192.168.0.2:8888" data-placement="top" data-rel="tooltip" data-title="要发布的机器列表，一行一个，非22端口可 ip:port"
+                                                              data-original-title="" title="">192.168.1.8</textarea>
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 目标机器 配置 end-->
+                                <!-- 任务配置-->
+                                <div class="col-sm-4">
+                                    <div class="widget-box transparent">
+                                        <div class="widget-header widget-header-flat">
+                                            <h4 class="lighter">
+                                                <i class="icon-tasks orange"></i>
+                                                高级任务 </h4>
+                                          {#  <span class="help-button" data-rel="popover" data-trigger="hover"
+                                                  data-placement="right"
+                                                  data-content="使用系统变量更方便处理路径问题：{WORKSPACE}：宿主机的独立部署空间或目标机的webroot    {VERSION}：发布的版本库的当前版本"
+                                                  title="" data-original-title="辅助变量">?</span>#}
+                                            <div class="widget-toolbar">
+                                                <a href="javascript:void(0);" data-action="collapse">
+                                                    <i class="icon-chevron-up"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <div class="form-group field-project-pre_deploy">
+                                                    <label class="text-right bolder"
+                                                           for="project-pre_deploy">pre_deploy</label>
+                                                    <textarea id="project-pre_deploy" class="form-control"
+                                                              name="pre_deploy" data-placement="top"
+                                                              data-rel="tooltip"
+                                                              data-title="在部署代码之前的准备工作，如git的一些前置检查、vendor的安装（更新），一行一条"
+                                                              style="overflow:scroll;overflow-y:hidden;;overflow-x:hidden"
+                                                              onfocus="window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);"
+                                                              onblur="clearInterval(this.clock);" data-original-title=""
+                                                              title=""></textarea>
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-post_deploy">
+                                                    <label class="text-right bolder"
+                                                           for="project-post_deploy">post_deploy</label>
+                                                    <textarea id="project-post_deploy" class="form-control"
+                                                              name="post_deploy" data-placement="top"
+                                                              data-rel="tooltip"
+                                                              data-title="git代码检出之后，可能做一些调整处理，如vendor拷贝，环境适配（mv config-test.php config.php），一行一条"
+                                                              style="overflow:scroll;overflow-y:hidden;;overflow-x:hidden"
+                                                              onfocus="window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);"
+                                                              onblur="clearInterval(this.clock);" data-original-title=""
+                                                              title=""></textarea>
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-pre_release">
+                                                    <label class="text-right bolder"
+                                                           for="project-pre_release">pre_release</label>
+                                                    <textarea id="project-pre_release" class="form-control"
+                                                              name="pre_release" data-placement="top"
+                                                              data-rel="tooltip"
+                                                              data-title="同步完所有目标机器之后，更改版本软链之前触发任务。java可能要做一些暂停服务的操作(双引号将会被转义为\&quot;)"
+                                                              style="overflow:scroll;overflow-y:hidden;;overflow-x:hidden"
+                                                              onfocus="window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);"
+                                                              onblur="clearInterval(this.clock);" data-original-title=""
+                                                              title=""></textarea>
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-post_release">
+                                                    <label class="text-right bolder"
+                                                           for="project-post_release">post_release</label>
+                                                    <textarea id="project-post_release" class="form-control"
+                                                              name="post_release" data-placement="top"
+                                                              data-rel="tooltip"
+                                                              data-title="所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、平滑重载/重启服务（nginx、php、task），一行一条(双引号将会被转义为\&quot;)"
+                                                              style="overflow:scroll;overflow-y:hidden;;overflow-x:hidden"
+                                                              onfocus="window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);"
+                                                              onblur="clearInterval(this.clock);" data-original-title=""
+                                                              title=""></textarea>
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                                <div class="form-group field-project-post_release_delay">
+                                                    <label class="text-right bolder" for="project-post_release_delay">post_release_delay</label>
+                                                    <input type="text" id="project-post_release_delay"
+                                                           class="form-control"
+                                                           name="post_release_delay" value="0" placeholder="0"
+                                                           data-placement="top" data-rel="tooltip" data-title="按顺序在每台目标机执行高级任务，每台服务器执行完毕后暂停x秒。
+        默认设置为 0，应用服务使用平滑重载，仅当应用服务无法支持平滑重载必须重启时才配置此参数。
+        设置为大于 0 的值会出现代码发布阶段各个服务器业务代码逻辑不一致的情况，请谨慎配置" data-original-title="" title="">
+
+                                                    <div class="help-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 目标机器 配置 end-->
+                            <div class="hr hr-dotted"></div>
+
+                            <div class="form-group">
+                                <label class="text-right bolder blue">
+                                    分支/tag上线: </label>
+                                <div class="radio" style="display: inline;" data-rel="tooltip"
+                                     data-title="测试环境推荐选项，可以选择branch+commit" data-placement="right"
+                                     data-original-title=""
+                                     title="">
+                                    <label>
+                                        <input name="repo_mode" value="branch" checked="checked" type="radio"
+                                               class="ace">
+                                        <span class="lbl"> branch </span>
+                                    </label>
+                                </div>
+
+                                <div class="radio" style="display: inline;" data-rel="tooltip" data-title="生产环境推荐选项"
+                                     data-placement="right" data-original-title="" title="">
+                                    <label>
+                                        <input name="repo_mode" value="tag" type="radio" class="ace">
+                                        <span class="lbl"> tag </span>
+                                    </label>
+                                </div>
+
+                                <div id="div-repo_mode_nontrunk" class="radio" style="display: none;" data-rel="tooltip"
+                                     data-title="svn仓库下没有trunk、branches、tags目录时选择" data-placement="right"
+                                     data-original-title="" title="">
+                                    <label>
+                                        <input name="repo_mode" value="nontrunk" type="radio" class="ace">
+                                        <span class="lbl">无trunk/无branches</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-right bolder blue" for="form-field-2">
+                                    是否开启审核: <input name="audit" value="0" type="hidden">
+                                    <input name="audit" value="1" type="checkbox"
+                                           class="ace ace-switch ace-switch-5" data-rel="tooltip"
+                                           data-title="开启时，用户提交上线任务需要审核方可上线" data-placement="right"
+                                           data-original-title=""
+                                           title="">
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="text-right bolder blue" for="form-field-2">
+                                    是否开启Ansible: <input name="audit" value="0" type="hidden">
+                                    <input name="ansible" value="1" type="checkbox"
+                                           class="ace ace-switch ace-switch-5" data-rel="tooltip"
+                                           data-title="开启时，通过Ansible并发传输文件，加快多机器时的代码发布速度。需安装 ansible，详见文档"
+                                           data-placement="right" data-original-title="" title="">
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="text-right bolder blue">
+                                    是否启用: <input name="status" value="0" type="hidden">
+                                    <input name="status" value="1" checked="" type="checkbox"
+                                           class="ace ace-switch ace-switch-6" data-rel="tooltip"
+                                           data-title="关闭时，用户不能对此项目发起上线" data-placement="right" data-original-title=""
+                                           title="">
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="box-footer">
+                            <input type="submit" class="btn btn-primary" value="提交">
+                        </div>
+                    </form>
+                </div>
+
+                <script>
+                    jQuery(function ($) {
+                        $('[data-rel=tooltip]').tooltip({container: 'body'});
+                        $('[data-rel=popover]').popover({container: 'body'});
+                        $('.show-git').click(function () {
+                            $('.username-password').hide();
+                            $('#project-repo_type').val('git');
+                            $('#div-repo_mode_nontrunk').hide();
+                        });
+                        $('.show-svn').click(function () {
+                            $('.username-password').show();
+                            $('#project-repo_type').val('svn');
+                            $('#div-repo_mode_nontrunk').css({'display': 'inline'});
+                        });
+                    });
+                </script>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+
+{% endblock %}

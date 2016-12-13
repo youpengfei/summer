@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- 测试环境 -->
+                    <div class="widget-box transparent">
+                        <div class="widget-header">
+                            <h4 class="lighter">测试环境</h4>
+
+                            <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
+                                <i class="icon-chevron-up"></i>
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main padding-6 no-padding-left no-padding-right">
+                                {% for dev_project in dev_projects %}
+                                    <a class="btn btn-inline btn-info"
+                                       style="min-width:120px;margin:auto auto 20px 40px;"
+                                       href="/task/submit/{{ dev_project.id }}">{{ dev_project.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 测试环境 -->
+                    <br>
+                    <!-- 仿真环境 -->
+                    <div class="widget-box transparent">
+                        <div class="widget-header">
+                            <h4 class="lighter">预发布环境</h4>
+
+                            <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
+                                <i class="icon-chevron-up"></i>
+                            </a>
+
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main padding-6 no-padding-left no-padding-right">
+                                {% for pre_release_project in pre_release_projects %}
+                                    <a class="btn btn-inline btn-warning"
+                                       style="min-width:120px;margin: auto auto 20px 40px;"
+                                       href="/task/submit/{{ pre_release_project.id }}">{{ pre_release_project.name }}</a>
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 仿真环境 -->
+                    <br>
+                    <!-- 线上环境 -->
+                    <div class="widget-box transparent">
+                        <div class="widget-header">
+                            <h4 class="lighter">线上环境</h4>
+
+                            <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
+                                <i class="icon-chevron-up"></i>
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main padding-6 no-padding-left no-padding-right">
+                                {% for prod_project in prod_projects %}
+                                    <a class="btn btn-inline btn-success"
+                                       style="min-width:120px;margin: auto auto 20px 40px;"
+                                       href="/task/submit/{{ prod_project.id }}">{{ prod_project.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 模拟线上环境 -->
+                    <br>
+
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+
+{% endblock %}

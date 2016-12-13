@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block title %}
+    新增用户
+{% endblock %}
+
+{% block bodyHead %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="/user/list">
+                    首页 </a>
+            </li>
+            <li class="active">新增用户</li>
+        </ul><!-- .breadcrumb -->
+    </div>
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="box col-xs-8">
+                    <form id="w0" action="/user/add" method="post">
+                        <div class="box-body">
+                            <div class="form-group field-adduserform-email required has-success">
+                                <label class="text-right bolder blue col-xs-2" for="adduserform-email">邮箱</label>
+                                <input type="text" id="adduserform-email" class="col-xs-5" name="AddUserForm[email]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group field-adduserform-password required has-success">
+                                <label class="text-right bolder blue col-xs-2" for="adduserform-password">新密码</label>
+                                <input type="password" id="adduserform-password" class="col-xs-5"
+                                       name="AddUserForm[password]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="form-group field-adduserform-realname required">
+                                <label class="text-right bolder blue col-xs-2" for="adduserform-realname">真实用户名</label>
+                                <input type="text" id="adduserform-realname" class="col-xs-5"
+                                       name="AddUserForm[realname]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group field-adduserform-role required has-success">
+                                <label class="text-right bolder blue col-xs-2" for="adduserform-role">角色</label>
+                                <select id="adduserform-role" class="col-xs-5" name="AddUserForm[role]">
+                                    <option value="1">开发者</option>
+                                    <option value="2">管理员</option>
+                                </select>
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="box-footer">
+                                <div class="col-xs-2"></div>
+                                <div class="form-group" style="margin-top:40px">
+                                    <button type="submit" class="btn btn-primary" name="submit-button">新增用户</button>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </form>
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+{% endblock %}
