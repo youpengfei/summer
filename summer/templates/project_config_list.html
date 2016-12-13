@@ -26,7 +26,8 @@
                         <form action="" method="GET">
                             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
                                 <div class="input-group">
-                                    <input type="text" name="kw" class="form-control search-query" placeholder="项目名称" value="{{ kw }}">
+                                    <input type="text" name="kw" class="form-control search-query" placeholder="项目名称"
+                                           value="{{ kw }}">
                                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-default btn-sm">
                             Search
@@ -68,7 +69,8 @@
                                                data-target="#myModal">
                                                 <i class="icon-zoom-in bigger-130"></i>
                                                 查看 </a>
-                                            <a href="/project/config/detection/?projectId={{ project.id }}" data-toggle="modal"
+                                            <a href="/project/config/detection/?projectId={{ project.id }}"
+                                               data-toggle="modal"
                                                data-target="#myModal">
                                                 <i class="icon-screenshot bigger-130"></i>
                                                 检测 </a>
@@ -81,7 +83,7 @@
                                             <a href="/project/config/edit?projectId={{ project.id }}">
                                                 <i class="icon-pencil bigger-130"></i>
                                                 修改 </a>
-                                            <a class="red btn-delete" data-id="1" href="javascript:void(0);">
+                                            <a class="red btn-delete" data-id="{{ project.id }}" href="javascript:void(0);">
                                                 <i class="icon-trash bigger-130"></i>
                                                 删除 </a>
                                         </div>
@@ -104,7 +106,7 @@
                         $('.btn-delete').click(function (e) {
                             $this = $(this);
                             if (confirm('确定要删除该项目？')) {
-                                $.get('/conf/delete', {projectId: $this.data('id')}, function (o) {
+                                $.get('/project/config/delete', {projectId: $this.data('id')}, function (o) {
                                     if (!o.code) {
                                         $this.closest("tr").remove();
                                     } else {

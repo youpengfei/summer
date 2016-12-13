@@ -4,7 +4,7 @@ from flask import redirect, jsonify
 from flask import render_template, Blueprint
 from flask import request
 from flask import url_for
-from flask.ext.login import current_user
+from flask.ext.login import current_user, login_required
 
 import git_utils
 from summer import db
@@ -18,6 +18,7 @@ mod = Blueprint('task', __name__)
 
 
 @mod.route('/list')
+@login_required
 def online_orders():
     user_id = current_user.id
     if request.args.get('page'):
@@ -33,6 +34,7 @@ def online_orders():
 
 
 @mod.route('/new', methods=['GET'])
+@login_required
 def add_online_order_page():
     projects = current_user.projects
     dev_projects = list(filter(lambda x: x.level == DeployEnv.DEV.value, projects))
@@ -46,6 +48,7 @@ def add_online_order_page():
 
 
 @mod.route('/delete', methods=['GET'])
+@login_required
 def delete_task():
     task_id = int(request.args.get('taskId'))
     one = Task.query.filter_by(id=task_id).one()
@@ -55,6 +58,7 @@ def delete_task():
 
 
 @mod.route('/submit/<int:project_id>', methods=['GET'])
+@login_required
 def submit_task_page(project_id):
     project = Project.query.filter_by(id=project_id).one()
     branch_list = git_utils.get_branch_list(project)
@@ -62,6 +66,7 @@ def submit_task_page(project_id):
 
 
 @mod.route('/submit', methods=['POST'])
+@login_required
 def add_online_order():
     title = request.form.get('title', None)
     branch = request.form.get('branch')
@@ -90,6 +95,7 @@ def add_online_order():
 
 
 @mod.route('/deploy', methods=['GET'])
+@login_required
 def deploy_index():
     task_id = int(request.args.get('taskId'))
     task = Task.query.filter_by(id=task_id).one()
@@ -97,12 +103,14 @@ def deploy_index():
 
 
 @mod.route('/deploy', methods=['POST'])
+@login_required
 def deploy_start():
     task_id = int(request.form.get('taskId'))
     return deploy.start_deploy(task_id)
 
 
 @mod.route('/get-process', methods=['GET'])
+@login_required
 def task_process():
     task_id = int(request.args.get('taskId'))
     if Record.query.filter_by(task_id=task_id).count() > 0:
@@ -113,6 +121,7 @@ def task_process():
 
 
 @mod.route('/rollback', methods=['GET'])
+@login_required
 def rollback_task():
     task_id = int(request.args.get('taskId'))
     task = Task.query.filter_by(id=task_id).one()

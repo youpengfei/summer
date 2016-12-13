@@ -51,10 +51,9 @@
                             <div class="form-group field-project-repo_url required">
                                 <label class="text-right bolder blue col-xs-1" for="project-repo_url">地址</label>
                                 <input type="text" id="project-repo_url" class="col-xs-11" name="repo_url"
-                                       value="{{ project.repo_url }}"
                                        placeholder="git@github.com:meolu/walle-web.git" data-placement="top"
                                        data-rel="tooltip"
-                                       data-title="支持git/svn。git格式:ssh-url，需要把宿主机php进程用户的ssh-key加入git信任"
+                                       data-title="支持git。git格式:ssh-url，需要把宿主机php进程用户的ssh-key加入git信任"
                                        data-original-title="" title="">
 
                                 <div class="help-block"></div>
@@ -76,7 +75,7 @@
                                                 <i class="icon-dashboard orange"></i>
                                                 宿主机 </h4>
                                             <div class="widget-toolbar">
-                                                <a href="javascript:;" data-action="collapse">
+                                                <a href="javascript:void(0);" data-action="collapse">
                                                     <i class="icon-chevron-up"></i>
                                                 </a>
                                             </div>
@@ -203,12 +202,12 @@ README.md" data-placement="top" data-rel="tooltip" data-title="剔除不上线�
                                             <h4 class="lighter">
                                                 <i class="icon-tasks orange"></i>
                                                 高级任务 </h4>
-                                            <span class="help-button" data-rel="popover" data-trigger="hover"
+                                          {#  <span class="help-button" data-rel="popover" data-trigger="hover"
                                                   data-placement="right"
                                                   data-content="使用系统变量更方便处理路径问题：{WORKSPACE}：宿主机的独立部署空间或目标机的webroot    {VERSION}：发布的版本库的当前版本"
-                                                  title="" data-original-title="辅助变量">?</span>
+                                                  title="" data-original-title="辅助变量">?</span>#}
                                             <div class="widget-toolbar">
-                                                <a href="javascript:;" data-action="collapse">
+                                                <a href="javascript:void(0);" data-action="collapse">
                                                     <i class="icon-chevron-up"></i>
                                                 </a>
                                             </div>
@@ -276,7 +275,7 @@ README.md" data-placement="top" data-rel="tooltip" data-title="剔除不上线�
                                                     <label class="text-right bolder" for="project-post_release_delay">post_release_delay</label>
                                                     <input type="text" id="project-post_release_delay"
                                                            class="form-control"
-                                                           name="Project[post_release_delay]" value="0" placeholder="0"
+                                                           name="post_release_delay" value="0" placeholder="0"
                                                            data-placement="top" data-rel="tooltip" data-title="按顺序在每台目标机执行高级任务，每台服务器执行完毕后暂停x秒。
         默认设置为 0，应用服务使用平滑重载，仅当应用服务无法支持平滑重载必须重启时才配置此参数。
         设置为大于 0 的值会出现代码发布阶段各个服务器业务代码逻辑不一致的情况，请谨慎配置" data-original-title="" title="">
@@ -325,7 +324,7 @@ README.md" data-placement="top" data-rel="tooltip" data-title="剔除不上线�
                             <div class="form-group">
                                 <label class="text-right bolder blue" for="form-field-2">
                                     是否开启审核: <input name="audit" value="0" type="hidden">
-                                    <input name="Project[audit]" value="1" type="checkbox"
+                                    <input name="audit" value="1" type="checkbox"
                                            class="ace ace-switch ace-switch-5" data-rel="tooltip"
                                            data-title="开启时，用户提交上线任务需要审核方可上线" data-placement="right"
                                            data-original-title=""
@@ -336,7 +335,7 @@ README.md" data-placement="top" data-rel="tooltip" data-title="剔除不上线�
 
                             <div class="form-group">
                                 <label class="text-right bolder blue" for="form-field-2">
-                                    是否开启Ansible: <input name="Project[ansible]" value="0" type="hidden">
+                                    是否开启Ansible: <input name="audit" value="0" type="hidden">
                                     <input name="ansible" value="1" type="checkbox"
                                            class="ace ace-switch ace-switch-5" data-rel="tooltip"
                                            data-title="开启时，通过Ansible并发传输文件，加快多机器时的代码发布速度。需安装 ansible，详见文档"

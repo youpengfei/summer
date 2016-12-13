@@ -37,7 +37,7 @@ class Project(db.Model):
     post_release = db.Column(db.Text)
     post_release_delay = db.Column(db.Integer)
     audit = db.Column(db.Integer)
-    ansible = db.Column(db.Integer)
+    ansible = db.Column(db.Integer, default=0)
     keep_version_num = db.Column(db.Integer)
     created_at = db.Column(db.Date)
     updated_at = db.Column(db.Date)
